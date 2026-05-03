@@ -7,13 +7,22 @@
     .page-header {
         margin-bottom: 40px;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        width: 100%;
     }
 
     .page-header h1 {
-        font-size: 36px;
-        font-weight: 700;
-        margin-bottom: 15px;
+        font-size: 48px;
+        font-weight: 800;
+        margin-bottom: 20px;
         color: #b91c1c;
+        letter-spacing: -0.5px;
+        width: 100%;
+        text-align: center;
     }
 
     .page-header p {
@@ -21,6 +30,8 @@
         font-size: 16px;
         max-width: 600px;
         margin: 0 auto;
+        text-align: center;
+        width: 100%;
     }
 
     .cards-container {
@@ -61,7 +72,9 @@
         justify-content: center;
         margin: 0 auto 20px;
         color: #b91c1c;
-        font-size: 32px;
+        font-size: 40px;
+        font-weight: 600;
+        line-height: 1;
     }
 
     .action-card h3 {
@@ -93,9 +106,9 @@
     @endif
 
     <div class="cards-container">
-        <a href="{{ route('aspirasi.create') }}" class="action-card">
+        <a href="{{ isset($event) ? route('aspirasi.show', $event->id) : route('aspirasi.create') }}" class="action-card">
             <div class="icon-circle">
-                <i class="fas fa-plus"></i>
+                <i class="fas fa-lightbulb"></i>
             </div>
             <h3>Buat Aspirasi Baru</h3>
             <p>Sampaikan kritik, saran, dan masukan Anda melalui form aspirasi.</p>
@@ -103,7 +116,7 @@
 
         <a href="{{ route('aspirasi.list') }}" class="action-card">
             <div class="icon-circle">
-                <i class="fas fa-list-ul"></i>
+                <i class="fas fa-comments"></i>
             </div>
             <h3>Lihat Aspirasi</h3>
             <p>Lihat aspirasi yang sudah masuk, termasuk vote, komentar, dan status tindak lanjut.</p>
