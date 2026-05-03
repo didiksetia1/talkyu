@@ -20,8 +20,26 @@ class AdminAduanController extends Controller
             $query->where('kategori', $request->kategori);
         }
 
-        $aduans = $query->get();
-        return view('admin.aduan.index', compact('aduans'));
+        $aduans = $query->paginate(10)->withQueryString();
+        $categories = Aduan::select('kategori')
+            ->distinct()
+            ->orderBy('kategori')
+            ->pluck('kategori');
+
+        $statusCounts = Aduan::selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        $stats = [
+            'total' => Aduan::count(),
+            'dikirim' => $statusCounts['dikirim'] ?? 0,
+            'ditinjau' => $statusCounts['ditinjau'] ?? 0,
+            'diproses' => $statusCounts['diproses'] ?? 0,
+            'selesai' => $statusCounts['selesai'] ?? 0,
+        ];
+
+        return view('admin.aduan.index', compact('aduans', 'categories', 'stats'));
     }
 
     public function show($id)

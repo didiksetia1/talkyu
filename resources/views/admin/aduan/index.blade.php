@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Admin - Kelola Aspirasi')
-@section('page_title', 'Kelola Aspirasi')
+@section('title', 'Admin - Kelola Aduan')
+@section('page_title', 'Kelola Aduan')
 
 @section('styles')
 <style>
@@ -9,6 +9,7 @@
         max-width: 1000px;
         margin: 0 auto;
         padding: 20px;
+        margin-top: 100px;
     }
 
     .stats-overview {
@@ -150,6 +151,26 @@
         color: #065f46;
     }
 
+    .status-dikirim {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-ditinjau {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-diproses {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-selesai {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
     .bem-response-section {
         background: #f0fdf4;
         border-left: 2px solid #10b981;
@@ -281,15 +302,19 @@
             <div class="stat-label">Total</div>
         </div>
         <div class="stat-item">
-            <div class="stat-value">{{ $stats['submitted'] ?? 0 }}</div>
-            <div class="stat-label">Belum Ditinjau</div>
+            <div class="stat-value">{{ $stats['dikirim'] ?? 0 }}</div>
+            <div class="stat-label">Dikirim</div>
         </div>
         <div class="stat-item">
-            <div class="stat-value">{{ $stats['being_considered'] ?? 0 }}</div>
+            <div class="stat-value">{{ $stats['ditinjau'] ?? 0 }}</div>
+            <div class="stat-label">Ditinjau</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">{{ $stats['diproses'] ?? 0 }}</div>
             <div class="stat-label">Diproses</div>
         </div>
         <div class="stat-item">
-            <div class="stat-value">{{ $stats['realized'] ?? 0 }}</div>
+            <div class="stat-value">{{ $stats['selesai'] ?? 0 }}</div>
             <div class="stat-label">Selesai</div>
         </div>
     </div>
@@ -301,8 +326,8 @@
                 <label for="kategori">Kategori</label>
                 <select name="kategori" id="kategori">
                     <option value="">Semua</option>
-                    @foreach(App\Models\Aspirasi::CATEGORIES as $key => $label)
-                    <option value="{{ $key }}" @if(request('kategori') === $key) selected @endif>{{ $label }}</option>
+                    @foreach($categories as $kategori)
+                    <option value="{{ $kategori }}" @if(request('kategori') === $kategori) selected @endif>{{ ucfirst($kategori) }}</option>
                     @endforeach
                 </select>
             </div>
@@ -310,9 +335,10 @@
                 <label for="status">Status</label>
                 <select name="status" id="status">
                     <option value="">Semua</option>
-                    <option value="submitted" @if(request('status') === 'submitted') selected @endif>Belum Ditinjau</option>
-                    <option value="being_considered" @if(request('status') === 'being_considered') selected @endif>Diproses</option>
-                    <option value="realized" @if(request('status') === 'realized') selected @endif>Selesai</option>
+                    <option value="dikirim" @if(request('status') === 'dikirim') selected @endif>Dikirim</option>
+                    <option value="ditinjau" @if(request('status') === 'ditinjau') selected @endif>Ditinjau</option>
+                    <option value="diproses" @if(request('status') === 'diproses') selected @endif>Diproses</option>
+                    <option value="selesai" @if(request('status') === 'selesai') selected @endif>Selesai</option>
                 </select>
             </div>
             <div class="filter-group">
@@ -326,129 +352,66 @@
         </form>
     </div>
 
-    <!-- Aspirasi List -->
-    @if($aspirasis->count() > 0)
-        @foreach($aspirasis as $aspirasi)
+    <!-- Aduan List -->
+    @if($aduans->count() > 0)
+        @foreach($aduans as $aduan)
         <div class="aspirasi-card">
             <div class="aspirasi-header">
                 <div>
-                    <h3 class="aspirasi-title">{{ $aspirasi->judul ?? 'Aspirasi Tanpa Judul' }}</h3>
+                    <h3 class="aspirasi-title">{{ $aduan->judul ?? 'Aduan Tanpa Judul' }}</h3>
                     <div class="aspirasi-meta">
-                        <span>{{ App\Models\Aspirasi::CATEGORIES[$aspirasi->kategori] ?? $aspirasi->kategori }}</span>
-                        <span>{{ $aspirasi->user?->name ?? 'Anonymous' }}</span>
-                        <span>{{ $aspirasi->created_at->format('d M Y') }}</span>
-                        <span>{{ $aspirasi->votes_count }} vote</span>
-                        <span>{{ $aspirasi->comments_count }} komentar</span>
+                        <span>{{ ucfirst($aduan->kategori ?? 'Umum') }}</span>
+                        <span>{{ $aduan->user?->name ?? 'Anonim' }}</span>
+                        <span>{{ $aduan->created_at->format('d M Y') }}</span>
                     </div>
                 </div>
-                <span class="status-badge status-{{ $aspirasi->status }}">
-                    @switch($aspirasi->status)
-                        @case('submitted')
-                            Belum Ditinjau
+                <span class="status-badge status-{{ $aduan->status }}">
+                    @switch($aduan->status)
+                        @case('dikirim')
+                            Dikirim
                             @break
-                        @case('being_considered')
+                        @case('ditinjau')
+                            Ditinjau
+                            @break
+                        @case('diproses')
                             Diproses
                             @break
-                        @case('realized')
+                        @case('selesai')
                             Selesai
                             @break
                         @default
-                            {{ ucfirst(str_replace('_', ' ', $aspirasi->status)) }}
+                            {{ ucfirst(str_replace('_', ' ', $aduan->status)) }}
                     @endswitch
                 </span>
             </div>
 
             <div class="aspirasi-content">
-                <strong>Deskripsi:</strong> {{ Str::limit($aspirasi->deskripsi, 150) }}
-                @if(strlen($aspirasi->deskripsi) > 150) ... @endif
+                <strong>Deskripsi:</strong> {{ Str::limit($aduan->deskripsi, 150) }}
+                @if(strlen($aduan->deskripsi) > 150) ... @endif
             </div>
 
-            @if($aspirasi->bem_response)
+            @if($aduan->tanggapan)
             <div class="bem-response-section">
-                <div class="bem-response-title">Response BEM:</div>
-                {{ Str::limit($aspirasi->bem_response, 150) }}
-                @if(strlen($aspirasi->bem_response) > 150) ... @endif
+                <div class="bem-response-title">Tanggapan Admin:</div>
+                {{ Str::limit($aduan->tanggapan, 150) }}
+                @if(strlen($aduan->tanggapan) > 150) ... @endif
             </div>
             @endif
 
             <div class="action-buttons">
-                <button class="btn-action" onclick="openResponseForm({{ $aspirasi->id }})">
-                    Beri Response
-                </button>
-                <button class="btn-action btn-secondary" onclick="updateStatus({{ $aspirasi->id }})">
-                    Update Status
-                </button>
-            </div>
-
-            <!-- Response Form (Hidden by default) -->
-            <div id="form-{{ $aspirasi->id }}" class="form-modal" style="display: none;">
-                <form onsubmit="submitResponse(event, {{ $aspirasi->id }})">
-                    @csrf
-                    <div class="form-group">
-                        <label>Status:</label>
-                        <select name="status" required>
-                            <option value="submitted" @if($aspirasi->status === 'submitted') selected @endif>Belum Ditinjau</option>
-                            <option value="being_considered" @if($aspirasi->status === 'being_considered') selected @endif>Diproses</option>
-                            <option value="realized" @if($aspirasi->status === 'realized') selected @endif>Selesai</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Response dari BEM:</label>
-                        <textarea name="bem_response" placeholder="Tulis response Anda di sini..." required>{{ $aspirasi->bem_response ?? '' }}</textarea>
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn-submit">Simpan</button>
-                        <button type="button" class="btn-cancel" onclick="closeResponseForm({{ $aspirasi->id }})">Batal</button>
-                    </div>
-                </form>
+                <a href="{{ route('admin.aduan.show', $aduan->id) }}" class="btn-action">Lihat & Kelola</a>
             </div>
         </div>
         @endforeach
 
         <!-- Pagination -->
         <div style="margin-top: 30px;">
-            {{ $aspirasis->links() }}
+            {{ $aduans->links() }}
         </div>
     @else
         <div class="empty-state">
-            <p>Belum ada aspirasi masuk.</p>
+            <p>Belum ada aduan masuk.</p>
         </div>
     @endif
 </div>
-
-<script>
-function openResponseForm(id) {
-    document.getElementById(`form-${id}`).style.display = 'block';
-}
-
-function closeResponseForm(id) {
-    document.getElementById(`form-${id}`).style.display = 'none';
-}
-
-function submitResponse(event, aspirasi_id) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-
-    fetch(`/admin/aspirasi/${aspirasi_id}/respond`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
-        },
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert(data.message || 'Gagal menyimpan response');
-        }
-    })
-    .catch(err => console.error(err));
-}
-
-function updateStatus(aspirasi_id) {
-    openResponseForm(aspirasi_id);
-}
-</script>
 @endsection
