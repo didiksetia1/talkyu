@@ -1,68 +1,94 @@
 <style>
     /* Admin Navbar Styles */
     .admin-nav {
-        background: rgba(30, 41, 59, 0.95);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(15, 23, 42, 0.12);
-        padding: 20px 50px;
+        background: #ffffff;
+        border: 1px solid rgba(229, 231, 235, 0.9);
+        border-radius: 0;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        padding: 15px 24px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         position: sticky;
         top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
         z-index: 100;
+        margin: 0;
     }
 
     .admin-nav-brand {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 700;
-        background: linear-gradient(to right, #f87171, #fca5a5);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #b91c1c;
         text-decoration: none;
+    }
+
+    .admin-nav-brand-group {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .admin-nav-divider {
+        color: #d1d5db;
+        font-weight: 300;
+        font-size: 20px;
+    }
+
+    .admin-nav-page-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
     }
 
     .admin-nav-links {
         display: flex;
-        gap: 30px;
+        gap: 24px;
         align-items: center;
     }
 
     .admin-nav-links a {
-        color: #f1f5f9;
+        color: #374151;
         text-decoration: none;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 500;
-        transition: all 0.3s ease;
-        padding: 8px 16px;
-        border-radius: 8px;
+        transition: color 0.2s ease;
+        padding: 8px 12px;
+        border-radius: 9999px;
     }
 
-    .admin-nav-links a:hover {
-        color: #fca5a5;
-        background: rgba(248, 113, 113, 0.1);
+    .admin-nav-links a:hover,
+    .admin-nav-links a.active {
+        color: #b91c1c;
     }
 
     .admin-btn-logout {
-        background: rgba(248, 113, 113, 0.1);
-        color: #fca5a5 !important;
-        border: 1px solid rgba(248, 113, 113, 0.3);
-        border-radius: 8px;
-        padding: 8px 20px;
+        background: transparent;
+        color: #b91c1c !important;
+        border: 1px solid #f87171;
+        border-radius: 9999px;
+        padding: 8px 18px;
         cursor: pointer;
         font-weight: 600;
-        transition: all 0.3s ease;
+        transition: background 0.2s ease, color 0.2s ease;
     }
 
     .admin-btn-logout:hover {
-        background: rgba(248, 113, 113, 0.2);
-        box-shadow: 0 4px 15px rgba(248, 113, 113, 0.2);
-        transform: translateY(-2px);
+        background: rgba(248, 113, 113, 0.1);
+        color: #991b1b !important;
     }
 </style>
 
 <nav class="admin-nav">
-    <a href="{{ route('admin.dashboard') }}" class="admin-nav-brand">Talkyu Admin</a>
+    <div class="admin-nav-brand-group">
+        <a href="{{ route('admin.dashboard') }}" class="admin-nav-brand">Talkyu Admin</a>
+        @hasSection('page_title')
+            <span class="admin-nav-divider">|</span>
+            <span class="admin-nav-page-title">@yield('page_title')</span>
+        @endif
+    </div>
     <div class="admin-nav-links">
         <a href="{{ route('admin.dashboard') }}">Dashboard</a>
         <a href="{{ route('admin.agenda.index') }}">Kelola Agenda</a>
