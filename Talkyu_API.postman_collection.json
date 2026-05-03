@@ -1,0 +1,546 @@
+{
+  "info": {
+    "_postman_id": "12345678-1234-1234-1234-123456789012",
+    "name": "Talkyu API",
+    "description": "API collection untuk Talkyu aplikasi",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"12345678\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/login",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/user",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "user"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Agenda",
+      "item": [
+        {
+          "name": "List All Agenda",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/agenda",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "agenda"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Agenda Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/agenda/1",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "agenda",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Comment to Agenda",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Agenda ini sangat informatif!\"\n}"
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/agenda/1/comment",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "agenda",
+                "1",
+                "comment"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Like/Unlike Agenda",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/agenda/1/like",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "agenda",
+                "1",
+                "like"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Aduan",
+      "item": [
+        {
+          "name": "Create Aduan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "kategori",
+                  "value": "Fasilitas",
+                  "type": "text"
+                },
+                {
+                  "key": "judul",
+                  "value": "AC di ruang kuliah tidak berfungsi",
+                  "type": "text"
+                },
+                {
+                  "key": "deskripsi",
+                  "value": "AC di ruang kuliah lt 3 rusak dan perlu diperbaiki segera",
+                  "type": "text"
+                },
+                {
+                  "key": "gambar",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/aduan",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "aduan"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Aduan History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/aduan/history",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "aduan",
+                "history"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Aduan Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/aduan/1",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "aduan",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Aspirasi",
+      "item": [
+        {
+          "name": "Get Active Events",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/aspirasi/events",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "aspirasi",
+                "events"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List All Aspirasi",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/aspirasi?q=&status=submitted",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "aspirasi"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": "submitted"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Aspirasi Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/aspirasi/1",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "aspirasi",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Aspirasi",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "judul",
+                  "value": "Tambah Lab Komputer Baru",
+                  "type": "text"
+                },
+                {
+                  "key": "kategori",
+                  "value": "fasilitas",
+                  "type": "text"
+                },
+                {
+                  "key": "deskripsi",
+                  "value": "Laboratorium komputer perlu ditambah karena mahasiswa terlalu banyak",
+                  "type": "text"
+                },
+                {
+                  "key": "tujuan_manfaat",
+                  "value": "Meningkatkan efisiensi pembelajaran praktik mahasiswa",
+                  "type": "text"
+                },
+                {
+                  "key": "anonim",
+                  "value": "false",
+                  "type": "text"
+                },
+                {
+                  "key": "lampiran",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/aspirasi/1",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "aspirasi",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Vote Aspirasi",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/aspirasi/1/vote",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "aspirasi",
+                "1",
+                "vote"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Comment Aspirasi",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"Aspirasi yang sangat bagus, saya setuju!\"\n}"
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/aspirasi/1/comment",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "aspirasi",
+                "1",
+                "comment"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
