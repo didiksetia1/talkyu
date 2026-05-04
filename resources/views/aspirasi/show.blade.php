@@ -5,27 +5,41 @@
 @section('styles')
 <style>
     .page-header {
-        margin-bottom: 40px;
+        margin: 0 auto 40px;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        max-width: 800px;
+        width: 100%;
     }
 
     .page-header h1 {
         font-size: 36px;
         font-weight: 700;
-        margin-bottom: 15px;
+        margin: 0;
         background: linear-gradient(to right, #b91c1c, #ef4444);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        width: 100%;
+        text-align: center;
     }
 
     .page-header p {
         color: rgba(127, 29, 29, 0.78);
         font-size: 16px;
+        max-width: 640px;
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
     }
 
     .form-container {
         max-width: 800px;
-        margin: 0 auto;
+        margin: 30px auto 0;
+        padding-top: 0;
     }
 
     .aspirasi-form-card {

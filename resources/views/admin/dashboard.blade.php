@@ -2,265 +2,267 @@
 
 @section('title', 'Admin Dashboard')
 
+
+{{-- ======================== STYLES ======================== --}}
 @section('styles')
 <style>
+
+    /* ---- Layout ---- */
+
     .admin-dashboard {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
+        width: 100%;
+        padding: 30px 24px 24px;
     }
 
+
+    /* ---- Header ---- */
+
     .dashboard-header {
-        margin-bottom: 30px;
+        margin-bottom: 24px;
     }
 
     .dashboard-header h1 {
         font-size: 32px;
+        font-weight: 700;
         color: #7f1d1d;
-        margin: 0 0 10px 0;
-    }
-
-    .dashboard-header p {
-        color: #666;
         margin: 0;
     }
 
-    /* Statistics Cards */
+
+    /* ---- Stat Cards ---- */
+
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 20px;
-        margin-bottom: 30px;
+        margin-bottom: 24px;
     }
 
     .stat-card {
         background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
+        border: 1px solid #f3f4f6;
+        border-radius: 12px;
         padding: 20px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition: transform 0.15s;
     }
 
     .stat-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .stat-card-icon {
-        font-size: 24px;
-        margin-bottom: 10px;
+        font-size: 22px;
+        margin-bottom: 14px;
     }
 
     .stat-card-label {
-        font-size: 12px;
-        color: #6b7280;
+        font-size: 10px;
+        font-weight: 700;
+        color: #9ca3af;
         text-transform: uppercase;
-        margin-bottom: 8px;
-        font-weight: 600;
+        letter-spacing: 0.07em;
+        margin-bottom: 6px;
     }
 
     .stat-card-value {
         font-size: 28px;
-        font-weight: bold;
+        font-weight: 700;
         color: #1f2937;
     }
 
-    .stat-card.agenda-card {
-        border-top: 3px solid #3b82f6;
-    }
+    .stat-card.agenda-card   { border-top: 3px solid #3b82f6; }
+    .stat-card.aduan-card    { border-top: 3px solid #ef4444; }
+    .stat-card.user-card     { border-top: 3px solid #10b981; }
+    .stat-card.aspirasi-card { border-top: 3px solid #f59e0b; }
+    .stat-card.event-card    { border-top: 3px solid #8b5cf6; }
 
-    .stat-card.aduan-card {
-        border-top: 3px solid #ef4444;
-    }
 
-    .stat-card.user-card {
-        border-top: 3px solid #10b981;
-    }
+    /* ---- Content Grid ---- */
 
-    .stat-card.aspirasi-card {
-        border-top: 3px solid #f59e0b;
-    }
-
-    .stat-card.event-card {
-        border-top: 3px solid #8b5cf6;
-    }
-
-    /* Content Grid */
     .content-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 20px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
+
+    .bottom-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+
+    /* ---- Card ---- */
 
     .card {
         background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
+        border: 1px solid #f3f4f6;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
     .card-header {
-        background: #f9fafb;
-        padding: 15px 20px;
-        border-bottom: 1px solid #e5e7eb;
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        border-bottom: 1px solid #f3f4f6;
     }
 
     .card-header h2 {
-        font-size: 18px;
-        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
         color: #1f2937;
+        margin: 0;
     }
 
     .card-header a {
+        font-size: 12px;
         color: #3b82f6;
         text-decoration: none;
-        font-size: 12px;
     }
 
     .card-header a:hover {
         text-decoration: underline;
     }
 
-    .card-body {
-        padding: 20px;
-    }
+
+    /* ---- List Items ---- */
 
     .list-item {
-        padding: 12px 0;
-        border-bottom: 1px solid #f3f4f6;
         display: flex;
-        justify-content: space-between;
         align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 18px;
+        border-bottom: 1px solid #f9fafb;
     }
 
     .list-item:last-child {
         border-bottom: none;
     }
 
-    .item-info {
-        flex: 1;
-    }
-
     .item-title {
+        font-size: 13px;
         font-weight: 600;
         color: #1f2937;
         margin: 0 0 4px 0;
+        line-height: 1.4;
     }
 
     .item-meta {
-        font-size: 12px;
-        color: #6b7280;
+        font-size: 11px;
+        color: #9ca3af;
         margin: 0;
     }
 
+    .empty-state {
+        padding: 32px 18px;
+        text-align: center;
+        font-size: 13px;
+        color: #d1d5db;
+    }
+
+
+    /* ---- Badge ---- */
+
     .item-badge {
+        flex-shrink: 0;
         display: inline-block;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 99px;
         white-space: nowrap;
     }
 
-    .badge-urgent {
-        background: #fee2e2;
-        color: #991b1b;
-    }
+    .badge-dikirim  { background: #f3f4f6; color: #374151; }
+    .badge-ditinjau { background: #eff6ff; color: #1d4ed8; }
+    .badge-diproses { background: #fef3c7; color: #92400e; }
+    .badge-selesai  { background: #f0fdf4; color: #166534; }
+    .badge-aspirasi { background: #f3e8ff; color: #6b21a8; }
+    .badge-pending  { background: #fef3c7; color: #92400e; }
 
-    .badge-pending {
-        background: #fef3c7;
-        color: #92400e;
-    }
 
-    .badge-processing {
-        background: #dbeafe;
-        color: #1e40af;
-    }
+    /* ---- Distribusi Status ---- */
 
-    .badge-completed {
-        background: #d1fae5;
-        color: #065f46;
-    }
-
-    .badge-aspirasi {
-        background: #f3e8ff;
-        color: #6b21a8;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 20px;
-        color: #6b7280;
-    }
-
-    .status-distribution {
+    .dist-row {
         display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
+        gap: 10px;
+        padding: 16px 18px;
     }
 
     .dist-item {
         flex: 1;
-        min-width: 120px;
-        text-align: center;
-        padding: 15px;
         background: #f9fafb;
-        border-radius: 6px;
+        border-radius: 8px;
+        padding: 14px 8px;
+        text-align: center;
     }
 
-    .dist-value {
-        font-size: 24px;
-        font-weight: bold;
+    .dist-num {
+        font-size: 22px;
+        font-weight: 700;
         color: #1f2937;
     }
 
     .dist-label {
-        font-size: 12px;
-        color: #6b7280;
-        margin-top: 5px;
+        font-size: 10px;
+        color: #9ca3af;
+        margin-top: 4px;
         text-transform: capitalize;
     }
 
-    .quick-actions {
+
+    /* ---- Aksi Cepat ---- */
+
+    .action-row {
         display: flex;
-        gap: 10px;
+        gap: 8px;
         flex-wrap: wrap;
+        padding: 16px 18px;
     }
 
     .btn-action {
         display: inline-block;
-        padding: 10px 15px;
-        background: #3b82f6;
-        color: white;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 8px 14px;
+        border-radius: 8px;
         text-decoration: none;
-        border-radius: 6px;
-        font-size: 13px;
-        transition: background 0.2s;
+        border: 1px solid #e5e7eb;
+        color: #374151;
+        background: white;
+        transition: background 0.15s, color 0.15s;
     }
 
     .btn-action:hover {
-        background: #2563eb;
+        background: #f9fafb;
+        color: #111827;
     }
 
-    .btn-action.secondary {
-        background: #6b7280;
+    .btn-action.primary {
+        background: #991b1b;
+        color: white;
+        border-color: #991b1b;
     }
 
-    .btn-action.secondary:hover {
-        background: #4b5563;
+    .btn-action.primary:hover {
+        background: #7f1d1d;
     }
 
-    .full-width {
-        grid-column: 1 / -1;
+
+    /* ---- Responsive ---- */
+
+    @media (max-width: 900px) {
+        .bottom-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 640px) {
         .stats-grid {
             grid-template-columns: repeat(2, 1fr);
         }
@@ -268,24 +270,25 @@
         .content-grid {
             grid-template-columns: 1fr;
         }
-
-        .dashboard-header h1 {
-            font-size: 24px;
-        }
     }
+
 </style>
 @endsection
 
+
+{{-- ======================== CONTENT ======================== --}}
 @section('content')
 <div class="admin-dashboard">
-    <!-- Header -->
+
+    {{-- Header --}}
     <div class="dashboard-header">
-        <h1>📊 Admin Dashboard</h1>
-        <p>Selamat datang, {{ Auth::user()->name }}! Berikut adalah ringkasan sistem Talkyu.</p>
+        <h1>Admin Dashboard</h1>
     </div>
 
-    <!-- Statistics Cards -->
+
+    {{-- ---- Stat Cards ---- --}}
     <div class="stats-grid">
+
         <div class="stat-card agenda-card">
             <div class="stat-card-icon">📅</div>
             <div class="stat-card-label">Total Agenda</div>
@@ -315,45 +318,46 @@
             <div class="stat-card-label">Event Aktif</div>
             <div class="stat-card-value">{{ $activeEvents }}</div>
         </div>
+
     </div>
 
-    <!-- Content Grid -->
+
+    {{-- ---- Content Grid ---- --}}
     <div class="content-grid">
-        <!-- Agenda Terbaru -->
+
+        {{-- Agenda Terbaru --}}
         <div class="card">
             <div class="card-header">
                 <h2>📅 Agenda Terbaru</h2>
                 <a href="{{ route('admin.agenda.index') }}">Lihat Semua →</a>
             </div>
-            <div class="card-body">
-                @if($recentAgendas->count() > 0)
-                    @foreach($recentAgendas as $agenda)
+
+            @if ($recentAgendas->count() > 0)
+                @foreach ($recentAgendas as $agenda)
                     <div class="list-item">
-                        <div class="item-info">
+                        <div>
                             <p class="item-title">{{ $agenda->title }}</p>
-                            <p class="item-meta">
-                                📌 {{ $agenda->category }} • 💬 {{ $agenda->comments_count }} • 👍 {{ $agenda->likes_count }}
-                            </p>
+                            <p class="item-meta">{{ $agenda->category }} &middot; {{ $agenda->comments_count }} komentar &middot; {{ $agenda->likes_count }} suka</p>
                         </div>
                     </div>
-                    @endforeach
-                @else
-                    <div class="empty-state">Belum ada agenda</div>
-                @endif
-            </div>
+                @endforeach
+            @else
+                <div class="empty-state">Belum ada agenda</div>
+            @endif
         </div>
 
-        <!-- Aduan Terbaru -->
+
+        {{-- Aduan Terbaru --}}
         <div class="card">
             <div class="card-header">
                 <h2>📋 Aduan Terbaru</h2>
                 <a href="{{ route('admin.aduan.index') }}">Lihat Semua →</a>
             </div>
-            <div class="card-body">
-                @if($recentAduans->count() > 0)
-                    @foreach($recentAduans as $aduan)
+
+            @if ($recentAduans->count() > 0)
+                @foreach ($recentAduans as $aduan)
                     <div class="list-item">
-                        <div class="item-info">
+                        <div>
                             <p class="item-title">{{ $aduan->judul }}</p>
                             <p class="item-meta">{{ $aduan->created_at->format('d M Y') }}</p>
                         </div>
@@ -361,71 +365,71 @@
                             {{ ucfirst($aduan->status ?? 'pending') }}
                         </span>
                     </div>
-                    @endforeach
-                @else
-                    <div class="empty-state">Belum ada aduan</div>
-                @endif
-            </div>
+                @endforeach
+            @else
+                <div class="empty-state">Belum ada aduan</div>
+            @endif
         </div>
 
-        <!-- Aspirasi Terbaru -->
+
+        {{-- Aspirasi Terbaru --}}
         <div class="card">
             <div class="card-header">
                 <h2>💡 Aspirasi Terbaru</h2>
             </div>
-            <div class="card-body">
-                @if($recentAspirasis->count() > 0)
-                    @foreach($recentAspirasis as $aspirasi)
+
+            @if ($recentAspirasis->count() > 0)
+                @foreach ($recentAspirasis as $aspirasi)
                     <div class="list-item">
-                        <div class="item-info">
+                        <div>
                             <p class="item-title">{{ $aspirasi->nama ?? 'Aspirasi Tanpa Nama' }}</p>
-                            <p class="item-meta">
-                                👤 {{ $aspirasi->user?->name ?? 'Anonymous' }} • {{ $aspirasi->created_at->format('d M Y') }}
-                            </p>
+                            <p class="item-meta">{{ $aspirasi->user?->name ?? 'Anonymous' }} &middot; {{ $aspirasi->created_at->format('d M Y') }}</p>
                         </div>
-                        <span class="item-badge badge-aspirasi">
-                            ⭐ {{ $aspirasi->rating }}
-                        </span>
+                        <span class="item-badge badge-aspirasi">{{ $aspirasi->rating }} bintang</span>
                     </div>
-                    @endforeach
-                @else
-                    <div class="empty-state">Belum ada aspirasi</div>
-                @endif
-            </div>
+                @endforeach
+            @else
+                <div class="empty-state">Belum ada aspirasi</div>
+            @endif
         </div>
 
-        <!-- Status Aduan Distribution -->
-        <div class="card full-width">
+    </div>
+
+
+    {{-- ---- Bottom Grid ---- --}}
+    <div class="bottom-grid">
+
+        {{-- Distribusi Status Aduan --}}
+        <div class="card">
             <div class="card-header">
                 <h2>📊 Distribusi Status Aduan</h2>
             </div>
-            <div class="card-body">
-                <div class="status-distribution">
-                    @forelse($aduanStatusDistribution as $status => $count)
+            <div class="dist-row">
+                @forelse ($aduanStatusDistribution as $status => $count)
                     <div class="dist-item">
-                        <div class="dist-value">{{ $count }}</div>
+                        <div class="dist-num">{{ $count }}</div>
                         <div class="dist-label">{{ $status }}</div>
                     </div>
-                    @empty
+                @empty
                     <div class="empty-state" style="width: 100%;">Belum ada data</div>
-                    @endforelse
-                </div>
+                @endforelse
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="card full-width">
+
+        {{-- Aksi Cepat --}}
+        <div class="card">
             <div class="card-header">
                 <h2>⚡ Aksi Cepat</h2>
             </div>
-            <div class="card-body">
-                <div class="quick-actions">
-                    <a href="{{ route('admin.agenda.create') }}" class="btn-action">➕ Buat Agenda Baru</a>
-                    <a href="{{ route('admin.agenda.index') }}" class="btn-action secondary">📅 Kelola Agenda</a>
-                    <a href="{{ route('admin.aduan.index') }}" class="btn-action secondary">📋 Kelola Aduan</a>
-                </div>
+            <div class="action-row">
+                <a href="{{ route('admin.agenda.create') }}" class="btn-action primary">Buat Agenda Baru</a>
+                <a href="{{ route('admin.agenda.index') }}" class="btn-action">Kelola Agenda</a>
+                <a href="{{ route('admin.aduan.index') }}" class="btn-action">Kelola Aduan</a>
             </div>
         </div>
+
     </div>
+
 </div>
 @endsection

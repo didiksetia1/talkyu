@@ -1,229 +1,417 @@
 @extends('layouts.app')
 
-@section('title', 'Admin - Kelola Pengaduan')
+@section('title', 'Admin - Kelola Aduan')
+@section('page_title', 'Kelola Aduan')
 
 @section('styles')
 <style>
     .admin-container {
-        max-width: 1100px;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 20px;
+        margin-top: 100px;
     }
 
-    .page-header {
+    .stats-overview {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid rgba(220, 38, 38, 0.1);
+        gap: 20px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
     }
 
-    .page-header h1 {
-        font-size: 28px;
-        color: #7f1d1d;
-        margin: 0;
-    }
-
-    .admin-table {
-        width: 100%;
-        border-collapse: collapse;
+    .stat-item {
         background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 12px 16px;
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
     }
 
-    .admin-table th, .admin-table td {
-        padding: 15px 20px;
-        text-align: left;
-        border-bottom: 1px solid #f3f4f6;
-    }
-
-    .admin-table th {
-        background: #fef2f2;
-        color: #991b1b;
+    .stat-value {
+        font-size: 20px;
         font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 2px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: #6b7280;
         text-transform: uppercase;
-        font-size: 13px;
         letter-spacing: 0.5px;
     }
 
-    .admin-table tr:hover {
-        background: #fdf2f8;
-    }
-
-    .status-badge {
-        font-size: 11px;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-weight: 700;
-        text-transform: uppercase;
-    }
-
-    .status-dikirim { background: #e0f2fe; color: #0284c7; }
-    .status-ditinjau { background: #fef08a; color: #854d0e; }
-    .status-diproses { background: #fed7aa; color: #c2410c; }
-    .status-selesai { background: #dcfce7; color: #166534; }
-
-    .btn-detail {
-        background: #ef4444;
-        color: white;
-        padding: 6px 14px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 13px;
-        font-weight: 600;
-        transition: background 0.3s;
-    }
-
-    .btn-detail:hover {
-        background: #dc2626;
-    }
-
-    /* Filter Styles */
-    .filter-container {
+    .filter-section {
         background: white;
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 25px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.03);
-        border: 1px solid rgba(220, 38, 38, 0.08);
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin-bottom: 15px;
     }
 
-    .filter-form {
+    .filter-section form {
         display: flex;
-        gap: 20px;
-        align-items: flex-end;
+        gap: 12px;
+        align-items: center;
         flex-wrap: wrap;
     }
 
     .filter-group {
         display: flex;
         flex-direction: column;
-        min-width: 200px;
+        gap: 4px;
     }
 
     .filter-group label {
-        font-size: 13px;
-        font-weight: 600;
-        color: #7f1d1d;
-        margin-bottom: 6px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    .filter-group select {
-        padding: 10px;
+    .filter-group select,
+    .filter-group input {
+        padding: 6px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        font-size: 14px;
+        min-width: 120px;
+    }
+
+    .aspirasi-card {
+        background: white;
         border: 1px solid #e5e7eb;
-        border-radius: 8px;
+        border-radius: 6px;
+        padding: 16px;
+        margin-bottom: 12px;
+    }
+
+    .aspirasi-card:hover {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .aspirasi-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 8px;
+    }
+
+    .aspirasi-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937;
+        margin: 0;
+    }
+
+    .aspirasi-meta {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        color: #6b7280;
+        flex-wrap: wrap;
+    }
+
+    .aspirasi-content {
+        margin-bottom: 12px;
+        padding: 10px;
         background: #f9fafb;
-        outline: none;
+        border-radius: 4px;
+        font-size: 14px;
+        line-height: 1.4;
+        color: #374151;
     }
 
-    .filter-group select:focus {
-        border-color: #f87171;
+    .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    .btn-filter {
-        background: #1e293b;
+    .status-submitted {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-being_considered {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-realized {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .status-dikirim {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-ditinjau {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-diproses {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-selesai {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .bem-response-section {
+        background: #f0fdf4;
+        border-left: 2px solid #10b981;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 12px;
+        font-size: 13px;
+        color: #065f46;
+    }
+
+    .bem-response-title {
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        background: #3b82f6;
         color: white;
-        padding: 10px 20px;
         border: none;
-        border-radius: 8px;
+        border-radius: 4px;
         cursor: pointer;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 500;
+        transition: background 0.2s;
     }
 
-    .btn-filter:hover { background: #0f172a; }
-
-    .btn-reset {
-        background: #f1f5f9;
-        color: #475569;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 600;
-        border: 1px solid #e2e8f0;
+    .btn-action:hover {
+        background: #2563eb;
     }
 
-    .btn-reset:hover { background: #e2e8f0; }
+    .btn-secondary {
+        background: #6b7280;
+    }
+
+    .btn-secondary:hover {
+        background: #4b5563;
+    }
+
+    .form-modal {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 16px;
+        margin-top: 12px;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 6px;
+        color: #1f2937;
+        font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 14px;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .form-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-submit {
+        background: #10b981;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+    .btn-submit:hover {
+        background: #059669;
+    }
+
+    .btn-cancel {
+        background: #e5e7eb;
+        color: #1f2937;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 30px 20px;
+        color: #6b7280;
+        font-size: 14px;
+    }
 </style>
 @endsection
 
 @section('content')
 <div class="admin-container">
-    <div class="page-header">
-        <h1>Manajemen Layanan Pengaduan (Admin)</h1>
+
+    <!-- Stats -->
+    <div class="stats-overview">
+        <div class="stat-item">
+            <div class="stat-value">{{ $stats['total'] ?? 0 }}</div>
+            <div class="stat-label">Total</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">{{ $stats['dikirim'] ?? 0 }}</div>
+            <div class="stat-label">Dikirim</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">{{ $stats['ditinjau'] ?? 0 }}</div>
+            <div class="stat-label">Ditinjau</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">{{ $stats['diproses'] ?? 0 }}</div>
+            <div class="stat-label">Diproses</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">{{ $stats['selesai'] ?? 0 }}</div>
+            <div class="stat-label">Selesai</div>
+        </div>
     </div>
 
-    <!-- Filter Section -->
-    <div class="filter-container">
-        <form action="{{ route('admin.aduan.index') }}" method="GET" class="filter-form">
+    <!-- Filter -->
+    <div class="filter-section">
+        <form method="GET" class="filter-form">
             <div class="filter-group">
-                <label for="status">Filter Berdasarkan Status</label>
-                <select name="status" id="status">
-                    <option value="">-- Semua Status --</option>
-                    <option value="dikirim" {{ request('status') === 'dikirim' ? 'selected' : '' }}>Dikirim</option>
-                    <option value="ditinjau" {{ request('status') === 'ditinjau' ? 'selected' : '' }}>Ditinjau</option>
-                    <option value="diproses" {{ request('status') === 'diproses' ? 'selected' : '' }}>Diproses</option>
-                    <option value="selesai" {{ request('status') === 'selesai' ? 'selected' : '' }}>Selesai</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label for="kategori">Filter Kategori</label>
+                <label for="kategori">Kategori</label>
                 <select name="kategori" id="kategori">
-                    <option value="">-- Semua Kategori --</option>
-                    <option value="Perkuliahan" {{ request('kategori') === 'Perkuliahan' ? 'selected' : '' }}>Perkuliahan</option>
-                    <option value="Penilaian & Nilai" {{ request('kategori') === 'Penilaian & Nilai' ? 'selected' : '' }}>Penilaian & Nilai</option>
-                    <option value="Dosen & Pengajar" {{ request('kategori') === 'Dosen & Pengajar' ? 'selected' : '' }}>Dosen & Pengajar</option>
-                    <option value="Administrasi Akademik" {{ request('kategori') === 'Administrasi Akademik' ? 'selected' : '' }}>Administrasi Akademik</option>
-                    <option value="Etika & Pelanggaran akademik" {{ request('kategori') === 'Etika & Pelanggaran akademik' ? 'selected' : '' }}>Etika & Pelanggaran akademik</option>
-                    <option value="Bimbingan & Skripsi" {{ request('kategori') === 'Bimbingan & Skripsi' ? 'selected' : '' }}>Bimbingan & Skripsi</option>
+                    <option value="">Semua</option>
+                    @foreach($categories as $kategori)
+                    <option value="{{ $kategori }}" @if(request('kategori') === $kategori) selected @endif>{{ ucfirst($kategori) }}</option>
+                    @endforeach
                 </select>
             </div>
-
-            <div style="display:flex; gap:10px;">
-                <button type="submit" class="btn-filter">Terapkan Filter</button>
-                @if(request()->has('status') || request()->has('kategori'))
-                    <a href="{{ route('admin.aduan.index') }}" class="btn-reset">Reset</a>
-                @endif
+            <div class="filter-group">
+                <label for="status">Status</label>
+                <select name="status" id="status">
+                    <option value="">Semua</option>
+                    <option value="dikirim" @if(request('status') === 'dikirim') selected @endif>Dikirim</option>
+                    <option value="ditinjau" @if(request('status') === 'ditinjau') selected @endif>Ditinjau</option>
+                    <option value="diproses" @if(request('status') === 'diproses') selected @endif>Diproses</option>
+                    <option value="selesai" @if(request('status') === 'selesai') selected @endif>Selesai</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="search">Cari</label>
+                <input type="text" name="q" id="search" placeholder="Judul, deskripsi..." value="{{ request('q') }}">
+            </div>
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn-action">Filter</button>
             </div>
         </form>
     </div>
 
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tgl Kirim</th>
-                <th>Pengirim</th>
-                <th>Kategori</th>
-                <th>Judul Aduan</th>
-                <th>Status</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($aduans as $aduan)
-            <tr>
-                <td>#{{ $aduan->id }}</td>
-                <td>{{ $aduan->created_at->format('d/m/Y H:i') }}</td>
-                <td>{{ $aduan->user ? $aduan->user->name : 'Anonim/Dihapus' }}</td>
-                <td>{{ $aduan->kategori }}</td>
-                <td><strong>{{ Str::limit($aduan->judul, 30) }}</strong></td>
-                <td>
-                    <span class="status-badge status-{{ $aduan->status }}">{{ $aduan->status }}</span>
-                </td>
-                <td>
-                    <a href="{{ route('admin.aduan.show', $aduan->id) }}" class="btn-detail">Lihat & Proses</a>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="7" style="text-align: center; padding: 30px; color: #6b7280;">Bebas tugas! Belum ada aduan yang masuk.</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+    <!-- Aduan List -->
+    @if($aduans->count() > 0)
+        @foreach($aduans as $aduan)
+        <div class="aspirasi-card">
+            <div class="aspirasi-header">
+                <div>
+                    <h3 class="aspirasi-title">{{ $aduan->judul ?? 'Aduan Tanpa Judul' }}</h3>
+                    <div class="aspirasi-meta">
+                        <span>{{ ucfirst($aduan->kategori ?? 'Umum') }}</span>
+                        <span>{{ $aduan->user?->name ?? 'Anonim' }}</span>
+                        <span>{{ $aduan->created_at->format('d M Y') }}</span>
+                    </div>
+                </div>
+                <span class="status-badge status-{{ $aduan->status }}">
+                    @switch($aduan->status)
+                        @case('dikirim')
+                            Dikirim
+                            @break
+                        @case('ditinjau')
+                            Ditinjau
+                            @break
+                        @case('diproses')
+                            Diproses
+                            @break
+                        @case('selesai')
+                            Selesai
+                            @break
+                        @default
+                            {{ ucfirst(str_replace('_', ' ', $aduan->status)) }}
+                    @endswitch
+                </span>
+            </div>
+
+            <div class="aspirasi-content">
+                <strong>Deskripsi:</strong> {{ Str::limit($aduan->deskripsi, 150) }}
+                @if(strlen($aduan->deskripsi) > 150) ... @endif
+            </div>
+
+            @if($aduan->tanggapan)
+            <div class="bem-response-section">
+                <div class="bem-response-title">Tanggapan Admin:</div>
+                {{ Str::limit($aduan->tanggapan, 150) }}
+                @if(strlen($aduan->tanggapan) > 150) ... @endif
+            </div>
+            @endif
+
+            <div class="action-buttons">
+                <a href="{{ route('admin.aduan.show', $aduan->id) }}" class="btn-action">Lihat & Kelola</a>
+            </div>
+        </div>
+        @endforeach
+
+        <!-- Pagination -->
+        <div style="margin-top: 30px;">
+            {{ $aduans->links() }}
+        </div>
+    @else
+        <div class="empty-state">
+            <p>Belum ada aduan masuk.</p>
+        </div>
+    @endif
 </div>
 @endsection
