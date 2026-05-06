@@ -244,10 +244,7 @@
 
 @section('content')
 <div class="admin-container">
-    <div class="page-header">
-        <h1>Manajemen Agenda & Postingan</h1>
-        <a href="{{ route('admin.agenda.create') }}" class="btn-add">+ Tambah Postingan Agenda</a>
-    </div>
+
 
     @if(session('success'))
         <div class="alert-success">
@@ -271,6 +268,8 @@
                     @endforeach
                 </select>
             </div>
+
+            <a href="{{ route('admin.agenda.create') }}" class="btn-add">+ Tambah Postingan Agenda</a>
 
             <div class="filter-actions">
                 <button type="submit" class="btn-filter">Terapkan</button>

@@ -8,11 +8,16 @@ use Illuminate\Http\Request;
 
 class AduanController extends Controller
 {
-    public function history()
+    public function index()
     {
         $aduans = Aduan::with('user')->where('user_id', auth()->id())->latest()->get();
 
         return response()->json(['data' => $aduans], 200);
+    }
+
+    public function history()
+    {
+        return $this->index();
     }
 
     public function show($id)

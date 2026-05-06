@@ -15,7 +15,8 @@
     .stats-overview {
         display: flex;
         gap: 20px;
-        margin-bottom: 20px;
+        /* space from navbar */
+        margin: 32px 0 20px 0;
         flex-wrap: wrap;
     }
 

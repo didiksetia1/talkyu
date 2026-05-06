@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Aduan
     Route::post('/aduan', [AduanController::class, 'store']);
+    Route::get('/aduan', [AduanController::class, 'index']);
     Route::get('/aduan/history', [AduanController::class, 'history']);
     Route::get('/aduan/{id}', [AduanController::class, 'show']);
 

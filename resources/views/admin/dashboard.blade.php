@@ -313,11 +313,11 @@
             <div class="stat-card-value">{{ $totalAspirasi }}</div>
         </div>
 
-        <div class="stat-card event-card">
+        {{-- <div class="stat-card event-card">
             <div class="stat-card-icon">🎯</div>
             <div class="stat-card-label">Event Aktif</div>
             <div class="stat-card-value">{{ $activeEvents }}</div>
-        </div>
+        </div> --}}
 
     </div>
 
