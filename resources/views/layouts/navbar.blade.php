@@ -69,7 +69,7 @@
     <a href="{{ route('home') }}" class="nav-brand">Talkyu</a>
     <div class="nav-links">
         <a href="{{ route('aduan.index') }}">Aduan</a>
-        <a href="{{ route('aspirasi.home') }}">💡 Aspirasi</a>
+        <a href="{{ route('aspirasi.home') }}"> Aspirasi</a>
         <a href="{{ route('agenda.index') }}">Agenda</a>
         <form method="POST" action="{{ route('logout') }}" class="logout-form">
             @csrf
