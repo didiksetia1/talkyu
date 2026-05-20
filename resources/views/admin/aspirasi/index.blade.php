@@ -5,75 +5,114 @@
 @section('styles')
 <style>
     .admin-container {
-        max-width: 1200px;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 20px;
     }
 
     .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid rgba(220, 38, 38, 0.1);
-        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e5e7eb;
     }
 
     .page-header h1 {
-        font-size: 28px;
-        color: #7f1d1d;
+        font-size: 24px;
+        color: #1f2937;
         margin: 0;
+        font-weight: 600;
+    }
+
+    .stats-overview {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 12px 16px;
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 2px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .filter-section {
         background: white;
         border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 20px;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin-bottom: 15px;
+    }
+
+    .filter-section form {
         display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
+        gap: 12px;
         align-items: center;
+        flex-wrap: wrap;
     }
 
     .filter-group {
         display: flex;
-        gap: 8px;
-        align-items: center;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .filter-group label {
+        font-size: 12px;
+        font-weight: 500;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .filter-group select,
     .filter-group input {
-        padding: 8px 12px;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
+        padding: 6px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
         font-size: 14px;
+        min-width: 120px;
     }
 
     .aspirasi-card {
         background: white;
         border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 15px;
-        transition: all 0.2s;
+        border-radius: 6px;
+        padding: 16px;
+        margin-bottom: 12px;
     }
 
     .aspirasi-card:hover {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
     .aspirasi-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
     }
 
     .aspirasi-title {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 600;
         color: #1f2937;
         margin: 0;
@@ -81,30 +120,31 @@
 
     .aspirasi-meta {
         display: flex;
-        gap: 15px;
-        margin-bottom: 12px;
-        font-size: 13px;
+        gap: 12px;
+        margin-bottom: 8px;
+        font-size: 12px;
         color: #6b7280;
         flex-wrap: wrap;
     }
 
     .aspirasi-content {
-        margin-bottom: 15px;
-        padding: 12px;
+        margin-bottom: 12px;
+        padding: 10px;
         background: #f9fafb;
-        border-radius: 6px;
+        border-radius: 4px;
         font-size: 14px;
-        line-height: 1.5;
+        line-height: 1.4;
         color: #374151;
     }
 
     .status-badge {
         display: inline-block;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: capitalize;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .status-submitted {
@@ -124,35 +164,35 @@
 
     .bem-response-section {
         background: #f0fdf4;
-        border-left: 3px solid #10b981;
-        padding: 12px;
+        border-left: 2px solid #10b981;
+        padding: 10px;
         border-radius: 4px;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         font-size: 13px;
         color: #065f46;
     }
 
     .bem-response-title {
         font-weight: 600;
-        margin-bottom: 5px;
+        margin-bottom: 4px;
     }
 
     .action-buttons {
         display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
+        gap: 8px;
+        margin-bottom: 12px;
         flex-wrap: wrap;
     }
 
     .btn-action {
-        padding: 10px 15px;
+        padding: 6px 12px;
         background: #3b82f6;
         color: white;
         border: none;
-        border-radius: 6px;
+        border-radius: 4px;
         cursor: pointer;
-        font-size: 13px;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 500;
         transition: background 0.2s;
     }
 
@@ -171,19 +211,19 @@
     .form-modal {
         background: white;
         border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 20px;
-        margin-top: 15px;
+        border-radius: 6px;
+        padding: 16px;
+        margin-top: 12px;
     }
 
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
     }
 
     .form-group label {
         display: block;
-        font-weight: 600;
-        margin-bottom: 8px;
+        font-weight: 500;
+        margin-bottom: 6px;
         color: #1f2937;
         font-size: 14px;
     }
@@ -192,31 +232,31 @@
     .form-group select,
     .form-group textarea {
         width: 100%;
-        padding: 10px;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
+        padding: 8px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
         font-family: inherit;
         font-size: 14px;
     }
 
     .form-group textarea {
         resize: vertical;
-        min-height: 120px;
+        min-height: 100px;
     }
 
     .form-buttons {
         display: flex;
-        gap: 10px;
+        gap: 8px;
     }
 
     .btn-submit {
         background: #10b981;
         color: white;
-        padding: 10px 20px;
+        padding: 8px 16px;
         border: none;
-        border-radius: 6px;
+        border-radius: 4px;
         cursor: pointer;
-        font-weight: 600;
+        font-weight: 500;
         transition: background 0.2s;
     }
 
@@ -227,44 +267,18 @@
     .btn-cancel {
         background: #e5e7eb;
         color: #1f2937;
-        padding: 10px 20px;
+        padding: 8px 16px;
         border: none;
-        border-radius: 6px;
+        border-radius: 4px;
         cursor: pointer;
-        font-weight: 600;
-    }
-
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-        margin-bottom: 25px;
-    }
-
-    .stat-card {
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 15px;
-        text-align: center;
-    }
-
-    .stat-value {
-        font-size: 24px;
-        font-weight: bold;
-        color: #1f2937;
-    }
-
-    .stat-label {
-        font-size: 12px;
-        color: #6b7280;
-        margin-top: 5px;
+        font-weight: 500;
     }
 
     .empty-state {
         text-align: center;
-        padding: 40px 20px;
+        padding: 30px 20px;
         color: #6b7280;
+        font-size: 14px;
     }
 </style>
 @endsection
@@ -272,35 +286,35 @@
 @section('content')
 <div class="admin-container">
     <div class="page-header">
-        <h1>💡 Kelola Aspirasi</h1>
+        <h1>Kelola Aspirasi</h1>
     </div>
 
     <!-- Stats -->
-    <div class="stats-grid">
-        <div class="stat-card">
+    <div class="stats-overview">
+        <div class="stat-item">
             <div class="stat-value">{{ $stats['total'] ?? 0 }}</div>
-            <div class="stat-label">Total Aspirasi</div>
+            <div class="stat-label">Total</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-item">
             <div class="stat-value">{{ $stats['submitted'] ?? 0 }}</div>
             <div class="stat-label">Belum Ditinjau</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-item">
             <div class="stat-value">{{ $stats['being_considered'] ?? 0 }}</div>
-            <div class="stat-label">Sedang Dipertimbangkan</div>
+            <div class="stat-label">Diproses</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-item">
             <div class="stat-value">{{ $stats['realized'] ?? 0 }}</div>
-            <div class="stat-label">Direalisasikan</div>
+            <div class="stat-label">Selesai</div>
         </div>
     </div>
 
     <!-- Filter -->
     <div class="filter-section">
-        <form method="GET" style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center; width: 100%;">
+        <form method="GET" class="filter-form">
             <div class="filter-group">
-                <label>Kategori:</label>
-                <select name="kategori">
+                <label for="kategori">Kategori</label>
+                <select name="kategori" id="kategori">
                     <option value="">Semua</option>
                     @foreach(App\Models\Aspirasi::CATEGORIES as $key => $label)
                     <option value="{{ $key }}" @if(request('kategori') === $key) selected @endif>{{ $label }}</option>
@@ -308,19 +322,22 @@
                 </select>
             </div>
             <div class="filter-group">
-                <label>Status:</label>
-                <select name="status">
+                <label for="status">Status</label>
+                <select name="status" id="status">
                     <option value="">Semua</option>
-                    <option value="submitted" @if(request('status') === 'submitted') selected @endif>Submitted</option>
-                    <option value="being_considered" @if(request('status') === 'being_considered') selected @endif>Being Considered</option>
-                    <option value="realized" @if(request('status') === 'realized') selected @endif>Realized</option>
+                    <option value="submitted" @if(request('status') === 'submitted') selected @endif>Belum Ditinjau</option>
+                    <option value="being_considered" @if(request('status') === 'being_considered') selected @endif>Diproses</option>
+                    <option value="realized" @if(request('status') === 'realized') selected @endif>Selesai</option>
                 </select>
             </div>
             <div class="filter-group">
-                <label>Cari:</label>
-                <input type="text" name="q" placeholder="Nama, saran..." value="{{ request('q') }}">
+                <label for="search">Cari</label>
+                <input type="text" name="q" id="search" placeholder="Judul, deskripsi..." value="{{ request('q') }}">
             </div>
-            <button type="submit" class="btn-action">Filter</button>
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn-action">Filter</button>
+            </div>
         </form>
     </div>
 
@@ -332,14 +349,28 @@
                 <div>
                     <h3 class="aspirasi-title">{{ $aspirasi->judul ?? 'Aspirasi Tanpa Judul' }}</h3>
                     <div class="aspirasi-meta">
-                        <span>� {{ App\Models\Aspirasi::CATEGORIES[$aspirasi->kategori] ?? $aspirasi->kategori }}</span>
-                        <span>�👤 {{ $aspirasi->user?->name ?? 'Anonymous' }}</span>
-                        <span>📅 {{ $aspirasi->created_at->format('d M Y') }}</span>
-                        <span>👍 {{ $aspirasi->votes_count }} votes</span>
-                        <span>💬 {{ $aspirasi->comments_count }} comments</span>
+                        <span>{{ App\Models\Aspirasi::CATEGORIES[$aspirasi->kategori] ?? $aspirasi->kategori }}</span>
+                        <span>{{ $aspirasi->user?->name ?? 'Anonymous' }}</span>
+                        <span>{{ $aspirasi->created_at->format('d M Y') }}</span>
+                        <span>{{ $aspirasi->votes_count }} vote</span>
+                        <span>{{ $aspirasi->comments_count }} komentar</span>
                     </div>
                 </div>
-                <span class="status-badge status-{{ $aspirasi->status }}">{{ ucfirst(str_replace('_', ' ', $aspirasi->status)) }}</span>
+                <span class="status-badge status-{{ $aspirasi->status }}">
+                    @switch($aspirasi->status)
+                        @case('submitted')
+                            Belum Ditinjau
+                            @break
+                        @case('being_considered')
+                            Diproses
+                            @break
+                        @case('realized')
+                            Selesai
+                            @break
+                        @default
+                            {{ ucfirst(str_replace('_', ' ', $aspirasi->status)) }}
+                    @endswitch
+                </span>
             </div>
 
             <div class="aspirasi-content">
@@ -349,7 +380,7 @@
 
             @if($aspirasi->bem_response)
             <div class="bem-response-section">
-                <div class="bem-response-title">📢 Response BEM:</div>
+                <div class="bem-response-title">Response BEM:</div>
                 {{ Str::limit($aspirasi->bem_response, 150) }}
                 @if(strlen($aspirasi->bem_response) > 150) ... @endif
             </div>
@@ -357,10 +388,10 @@
 
             <div class="action-buttons">
                 <button class="btn-action" onclick="openResponseForm({{ $aspirasi->id }})">
-                    ✉️ Beri Response
+                    Beri Response
                 </button>
                 <button class="btn-action btn-secondary" onclick="updateStatus({{ $aspirasi->id }})">
-                    🔄 Update Status
+                    Update Status
                 </button>
             </div>
 
@@ -371,9 +402,9 @@
                     <div class="form-group">
                         <label>Status:</label>
                         <select name="status" required>
-                            <option value="submitted" @if($aspirasi->status === 'submitted') selected @endif>Submitted</option>
-                            <option value="being_considered" @if($aspirasi->status === 'being_considered') selected @endif>Sedang Dipertimbangkan</option>
-                            <option value="realized" @if($aspirasi->status === 'realized') selected @endif>Direalisasikan</option>
+                            <option value="submitted" @if($aspirasi->status === 'submitted') selected @endif>Belum Ditinjau</option>
+                            <option value="being_considered" @if($aspirasi->status === 'being_considered') selected @endif>Diproses</option>
+                            <option value="realized" @if($aspirasi->status === 'realized') selected @endif>Selesai</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -395,7 +426,7 @@
         </div>
     @else
         <div class="empty-state">
-            <p>Belum ada aspirasi masuk. 📭</p>
+            <p>Belum ada aspirasi masuk.</p>
         </div>
     @endif
 </div>

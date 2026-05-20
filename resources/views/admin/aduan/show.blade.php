@@ -2,171 +2,399 @@
 
 @section('title', 'Detail Pengaduan - Admin')
 
+
+{{-- ======================== STYLES ======================== --}}
 @section('styles')
 <style>
-    .admin-container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
+
+    /* ---- Layout ---- */
+
+    .admin-wrap {
+        min-height: 100vh;
+        background: #f5f5f3;
+        padding: 36px 16px 24px;
     }
+
+    .admin-inner {
+        max-width: 700px;
+        margin: 0 auto;
+        padding-top: 14px;
+    }
+
 
     .btn-back {
-        display: inline-block;
-        margin-bottom: 20px;
-        color: #b91c1c;
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    .detail-card {
-        background: white;
-        border-radius: 12px;
-        padding: 30px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        border: 1px solid rgba(220, 38, 38, 0.1);
-        margin-bottom: 30px;
-    }
-
-    .detail-header {
-        border-bottom: 1px solid #f3f4f6;
-        padding-bottom: 15px;
-        margin-bottom: 20px;
-    }
-
-    .detail-title {
-        font-size: 24px;
-        color: #7f1d1d;
-        margin-bottom: 10px;
-    }
-
-    .meta-data {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
         color: #6b7280;
-        font-size: 14px;
-        margin-bottom: 5px;
+        text-decoration: none;
+        transition: color 0.15s;
     }
 
-    .aduan-desc {
-        background: #f9fafb;
+    .btn-back:hover {
+        color: #1f2937;
+    }
+
+    .btn-back svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 1.8;
+    }
+
+
+    /* ---- Alert ---- */
+
+    .alert-success {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f0fdf4;
+        border: 0.5px solid #bbf7d0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin-bottom: 14px;
+        font-size: 13px;
+        color: #166534;
+    }
+
+    .alert-success svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+        stroke: #16a34a;
+        fill: none;
+        stroke-width: 2;
+    }
+
+
+    /* ---- Card ---- */
+
+    .card {
+        background: #ffffff;
+        border: 0.5px solid rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
         padding: 20px;
+        margin-bottom: 18px;
+    }
+
+
+    /* ---- Aduan Header ---- */
+
+    .aduan-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .aduan-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #111827;
+        line-height: 1.4;
+    }
+
+    .badge {
+        flex-shrink: 0;
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 99px;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+    }
+
+    .badge-dikirim  { background: #f3f4f6; color: #374151; }
+    .badge-ditinjau { background: #eff6ff; color: #1d4ed8; }
+    .badge-diproses { background: #fef3c7; color: #92400e; }
+    .badge-selesai  { background: #f0fdf4; color: #166534; }
+
+
+    /* ---- Meta Info ---- */
+
+    .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding-bottom: 16px;
+        border-bottom: 0.5px solid #f3f4f6;
+        margin-bottom: 16px;
+    }
+
+    .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .meta-label {
+        font-size: 10px;
+        font-weight: 600;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .meta-value {
+        font-size: 13px;
+        font-weight: 500;
+        color: #1f2937;
+    }
+
+
+    /* ---- Konten Aduan ---- */
+
+    .section-label {
+        font-size: 10px;
+        font-weight: 600;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+    }
+
+    .desc-box {
+        background: #f9fafb;
         border-radius: 8px;
-        line-height: 1.6;
+        padding: 12px 14px;
+        font-size: 13px;
         color: #374151;
-        margin-bottom: 20px;
+        line-height: 1.6;
         white-space: pre-wrap;
     }
 
     .aduan-gambar {
+        display: block;
         max-width: 100%;
         border-radius: 8px;
-        margin-top: 15px;
-        border: 1px solid #e5e7eb;
+        margin-top: 14px;
+        border: 0.5px solid rgba(0, 0, 0, 0.08);
+    }
+
+
+    /* ---- Form Tindak Lanjut ---- */
+
+    .form-section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 16px;
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 14px;
     }
 
     .form-group label {
         display: block;
-        margin-bottom: 8px;
+        font-size: 12px;
         font-weight: 600;
-        color: #374151;
+        color: #6b7280;
+        margin-bottom: 6px;
     }
 
     .form-control {
         width: 100%;
-        padding: 12px;
-        border: 1px solid #d1d5db;
+        padding: 9px 12px;
+        background: #f9fafb;
+        border: 0.5px solid #e5e7eb;
         border-radius: 8px;
-        background: #fff;
+        font-size: 13px;
+        color: #1f2937;
+        transition: border-color 0.15s, background 0.15s;
+        appearance: none;
+        -webkit-appearance: none;
     }
 
     .form-control:focus {
         outline: none;
         border-color: #b91c1c;
+        background: #fff;
     }
 
-    textarea.form-control {
-        min-height: 120px;
-        resize: vertical;
-    }
-
-    .btn-submit {
-        background: #ef4444;
-        color: white;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
+    select.form-control {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 32px;
         cursor: pointer;
     }
 
-    .btn-submit:hover {
-        background: #dc2626;
+    textarea.form-control {
+        min-height: 90px;
+        resize: vertical;
+        line-height: 1.5;
     }
 
-    .alert-success {
-        background: #dcfce7;
-        color: #166534;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        border: 1px solid #bbf7d0;
+
+    /* ---- Form Actions ---- */
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 16px;
     }
+
+    .btn-cancel {
+        padding: 8px 16px;
+        background: transparent;
+        border: 0.5px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #6b7280;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-cancel:hover {
+        background: #f9fafb;
+        color: #374151;
+    }
+
+    .btn-submit {
+        padding: 8px 18px;
+        background: #991b1b;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #ffffff;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.15s;
+    }
+
+    .btn-submit:hover {
+        background: #7f1d1d;
+    }
+
+    .btn-submit svg {
+        width: 13px;
+        height: 13px;
+        stroke: white;
+        fill: none;
+        stroke-width: 2;
+    }
+
 </style>
 @endsection
 
-@section('content')
-<div class="admin-container">
-    <a href="{{ route('admin.aduan.index') }}" class="btn-back">← Kembali ke Daftar Aduan</a>
 
-    @if(session('success'))
+{{-- ======================== CONTENT ======================== --}}
+@section('content')
+<div class="admin-wrap">
+<div class="admin-inner">
+
+
+
+    {{-- Alert --}}
+    @if (session('success'))
         <div class="alert-success">
+            <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
             {{ session('success') }}
         </div>
     @endif
 
-    <div class="detail-card">
-        <div class="detail-header">
-            <h1 class="detail-title">{{ $aduan->judul }}</h1>
-            <div class="meta-data"><strong>Pengirim:</strong> {{ $aduan->user ? $aduan->user->name : 'Anonim' }}</div>
-            <div class="meta-data"><strong>Kategori:</strong> {{ $aduan->kategori }}</div>
-            <div class="meta-data"><strong>Tanggal Kirim:</strong> {{ $aduan->created_at->format('d M Y, H:i') }}</div>
+    {{-- ---- Card: Detail Aduan ---- --}}
+    <div class="card">
+
+        <div class="aduan-header">
+            <h2 class="aduan-title">{{ $aduan->judul }}</h2>
+
+            @php
+                $badgeClass = match($aduan->status) {
+                    'ditinjau' => 'badge-ditinjau',
+                    'diproses' => 'badge-diproses',
+                    'selesai'  => 'badge-selesai',
+                    default    => 'badge-dikirim',
+                };
+                $badgeLabel = match($aduan->status) {
+                    'dikirim'  => 'Dikirim',
+                    'ditinjau' => 'Ditinjau',
+                    'diproses' => 'Diproses',
+                    'selesai'  => 'Selesai',
+                    default    => ucfirst($aduan->status),
+                };
+            @endphp
+
+            <span class="badge {{ $badgeClass }}">{{ $badgeLabel }}</span>
         </div>
 
-        <h4>Deskripsi Keluhan:</h4>
-        <div class="aduan-desc">{{ $aduan->deskripsi }}</div>
+        <div class="meta-row">
+            <div class="meta-item">
+                <span class="meta-label">Pengirim</span>
+                <span class="meta-value">{{ $aduan->user ? $aduan->user->name : 'Anonim' }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Kategori</span>
+                <span class="meta-value">{{ $aduan->kategori }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Tanggal</span>
+                <span class="meta-value">{{ $aduan->created_at->format('d M Y, H:i') }}</span>
+            </div>
+        </div>
 
-        @if($aduan->gambar)
-            <h4>Bukti Lampiran:</h4>
+        <div class="section-label">Deskripsi Keluhan</div>
+        <div class="desc-box">{{ $aduan->deskripsi }}</div>
+
+        @if ($aduan->gambar)
+            <div class="section-label" style="margin-top: 16px;">Bukti Lampiran</div>
             <img src="{{ asset('storage/' . $aduan->gambar) }}" alt="Bukti Foto" class="aduan-gambar">
         @endif
+
     </div>
 
-    <!-- Form Update Status & Tanggapan -->
-    <div class="detail-card">
-        <h3 style="color:#7f1d1d; margin-bottom: 20px;">Tindak Lanjut & Tanggapan</h3>
+
+    {{-- ---- Card: Tindak Lanjut ---- --}}
+    <div class="card">
+
+        <p class="form-section-title">Tindak Lanjut & Tanggapan</p>
+
         <form action="{{ route('admin.aduan.update', $aduan->id) }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="form-group">
-                <label for="status">Ubah Status Aduan</label>
+                <label for="status">Status Aduan</label>
                 <select id="status" name="status" class="form-control">
-                    <option value="dikirim" {{ $aduan->status == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
+                    <option value="dikirim"  {{ $aduan->status == 'dikirim'  ? 'selected' : '' }}>Dikirim</option>
                     <option value="ditinjau" {{ $aduan->status == 'ditinjau' ? 'selected' : '' }}>Ditinjau</option>
                     <option value="diproses" {{ $aduan->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
-                    <option value="selesai" {{ $aduan->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                    <option value="selesai"  {{ $aduan->status == 'selesai'  ? 'selected' : '' }}>Selesai</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="tanggapan">Balasan / Tanggapan Admin (Disampaikan ke Pengirim)</label>
-                <textarea id="tanggapan" name="tanggapan" class="form-control" placeholder="Tuliskan jawaban resmi terkait aduan ini...">{{ $aduan->tanggapan }}</textarea>
+                <label for="tanggapan">Tanggapan Admin</label>
+                <textarea id="tanggapan" name="tanggapan" class="form-control"
+                    placeholder="Tuliskan jawaban resmi terkait aduan ini...">{{ $aduan->tanggapan }}</textarea>
             </div>
 
-            <button type="submit" class="btn-submit">Simpan Pembaruan</button>
+            <div class="form-actions">
+                <a href="{{ route('admin.aduan.index') }}" class="btn-cancel">Batal</a>
+                <button type="submit" class="btn-submit">
+                    <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                    Simpan Perubahan
+                </button>
+            </div>
+
         </form>
+
     </div>
+
+</div>
 </div>
 @endsection

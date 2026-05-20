@@ -8,6 +8,12 @@
         margin-bottom: 50px;
         text-align: center;
         margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        width: 100%;
     }
 
     .page-header h1 {
@@ -17,6 +23,8 @@
         background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        width: 100%;
+        text-align: center;
     }
 
     .page-header p {
@@ -24,6 +32,8 @@
         font-size: 18px;
         max-width: 600px;
         margin: 0 auto;
+        text-align: center;
+        width: 100%;
     }
 
     .action-cards {
