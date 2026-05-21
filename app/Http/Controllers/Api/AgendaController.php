@@ -69,4 +69,29 @@ class AgendaController extends Controller
 
         return response()->json(['message' => 'Agenda disukai.', 'liked' => true, 'data' => $newLike], 201);
     }
+
+
+    public function comments($id)
+    {
+        $agenda = Agenda::findOrFail($id);
+
+        $comments = AgendaComment::with('user')
+            ->where('agenda_id', $agenda->id)
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'data' => $comments->map(function ($comment) {
+                return [
+                    'id' => $comment->id,
+                    'content' => $comment->content,
+                    'comment' => $comment->content,
+                    'created_at' => $comment->created_at,
+                    'user' => [
+                        'name' => $comment->user?->name,
+                    ],
+                ];
+            }),
+        ], 200);
+    }
 }
