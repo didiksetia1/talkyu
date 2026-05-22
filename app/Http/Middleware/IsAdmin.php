@@ -20,6 +20,10 @@ class IsAdmin
             return $next($request);
         }
 
+        if (Auth::check() && Auth::user()->role === 'bem') {
+            return redirect('/admin')->with('error', 'Role BEM tidak memiliki akses ke halaman Kelola Aduan.');
+        }
+
         // If not admin, abort or redirect
         return redirect('/home')->with('error', 'Anda tidak memiliki akses ke halaman Admin.');
     }

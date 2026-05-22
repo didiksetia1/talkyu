@@ -16,6 +16,21 @@ class Agenda extends Model
 
     protected $appends = ['image_source'];
 
+    public function getImageUrlAttribute(): ?string
+    {
+        $rawImageUrl = $this->attributes['image_url'] ?? null;
+
+        if (!empty($rawImageUrl)) {
+            return $rawImageUrl;
+        }
+
+        if (!empty($this->image_path) && Storage::disk('public')->exists($this->image_path)) {
+            return asset('storage/' . $this->image_path);
+        }
+
+        return null;
+    }
+
     public function getImageSourceAttribute(): ?string
     {
         if (!empty($this->image_path) && Storage::disk('public')->exists($this->image_path)) {

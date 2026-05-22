@@ -7,17 +7,20 @@ use App\Models\Aduan;
 use App\Models\Aspirasi;
 use App\Models\AspirasiEvent;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
 {
     public function index(): View
     {
+        $canViewAduan = Auth::user()?->role === 'admin';
+
         // Statistics
         $totalAgenda = Agenda::count();
-        $totalAduan = Aduan::count();
         $totalUsers = User::count();
         $totalAspirasi = Aspirasi::count();
+        $totalAduan = $canViewAduan ? Aduan::count() : 0;
 
         // Recent data
         $recentAgendas = Agenda::withCount(['comments', 'likes'])
@@ -25,9 +28,9 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get();
 
-        $recentAduans = Aduan::latest()
-            ->take(5)
-            ->get();
+        $recentAduans = $canViewAduan
+            ? Aduan::latest()->take(5)->get()
+            : collect();
 
         $recentAspirasis = Aspirasi::with(['user', 'event'])
             ->latest()
@@ -35,11 +38,13 @@ class AdminDashboardController extends Controller
             ->get();
 
         // Status distribution
-        $aduanStatusDistribution = Aduan::selectRaw('status, COUNT(*) as count')
-            ->groupBy('status')
-            ->get()
-            ->pluck('count', 'status')
-            ->toArray();
+        $aduanStatusDistribution = $canViewAduan
+            ? Aduan::selectRaw('status, COUNT(*) as count')
+                ->groupBy('status')
+                ->get()
+                ->pluck('count', 'status')
+                ->toArray()
+            : [];
 
         // Category distribution for Agenda
         $agendaCategoryDistribution = Agenda::selectRaw('category, COUNT(*) as count')
@@ -61,7 +66,8 @@ class AdminDashboardController extends Controller
             'recentAspirasis',
             'aduanStatusDistribution',
             'agendaCategoryDistribution',
-            'activeEvents'
+            'activeEvents',
+            'canViewAduan'
         ));
     }
 }

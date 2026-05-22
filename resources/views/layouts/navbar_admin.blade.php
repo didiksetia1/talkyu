@@ -83,7 +83,9 @@
 
 <nav class="admin-nav">
     <div class="admin-nav-brand-group">
-        <a href="{{ route('admin.dashboard') }}" class="admin-nav-brand">Talkyu Admin</a>
+        <a href="{{ route('admin.dashboard') }}" class="admin-nav-brand">
+            {{ Auth::user()->role === 'bem' ? 'Talkyu BEM' : 'Talkyu Admin' }}
+        </a>
         @hasSection('page_title')
             <span class="admin-nav-divider">|</span>
             <span class="admin-nav-page-title">@yield('page_title')</span>
@@ -92,7 +94,9 @@
     <div class="admin-nav-links">
         <a href="{{ route('admin.dashboard') }}">Dashboard</a>
         <a href="{{ route('admin.agenda.index') }}">Kelola Agenda</a>
-        <a href="{{ route('admin.aduan.index') }}">Kelola Aduan</a>
+        @if(Auth::user()->role === 'admin')
+            <a href="{{ route('admin.aduan.index') }}">Kelola Aduan</a>
+        @endif
         <a href="{{ route('admin.aspirasi.index') }}">Kelola Aspirasi</a>
         <form method="POST" action="{{ route('logout') }}" class="logout-form" style="margin:0;">
             @csrf

@@ -57,7 +57,7 @@
     <div class="ambient-circle circle-1"></div>
     <div class="ambient-circle circle-2"></div>
 
-    @if(Auth::check() && Auth::user()->role === 'admin')
+    @if(Auth::check() && in_array(Auth::user()->role, ['admin', 'bem']))
         @include('layouts.navbar_admin')
     @else
         @include('layouts.navbar')

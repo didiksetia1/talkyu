@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsAdminOrBem;
 
 Route::get('/', function () {
     return view('welcome');
@@ -54,15 +56,10 @@ Route::middleware('auth')->group(function () {
     // Admin Routes
     Route::prefix('admin')
         ->name('admin.')
-        ->middleware([\App\Http\Middleware\IsAdmin::class])
+        ->middleware([IsAdminOrBem::class])
         ->group(function () {
             // Dashboard
             Route::get('/', [App\Http\Controllers\AdminDashboardController::class, 'index'])->name('dashboard');
-
-            // Aduan Routes
-            Route::get('/aduan', [App\Http\Controllers\AdminAduanController::class, 'index'])->name('aduan.index');
-            Route::get('/aduan/{id}', [App\Http\Controllers\AdminAduanController::class, 'show'])->name('aduan.show');
-            Route::put('/aduan/{id}', [App\Http\Controllers\AdminAduanController::class, 'update'])->name('aduan.update');
 
             // Agenda Routes
             Route::get('/agenda', [App\Http\Controllers\AdminAgendaController::class, 'index'])->name('agenda.index');
@@ -75,5 +72,12 @@ Route::middleware('auth')->group(function () {
             // Aspirasi Routes
             Route::get('/aspirasi', [App\Http\Controllers\AdminAspirasiController::class, 'index'])->name('aspirasi.index');
             Route::post('/aspirasi/{id}/respond', [App\Http\Controllers\AdminAspirasiController::class, 'respond'])->name('aspirasi.respond');
+
+            Route::middleware([IsAdmin::class])->group(function () {
+                // Aduan Routes
+                Route::get('/aduan', [App\Http\Controllers\AdminAduanController::class, 'index'])->name('aduan.index');
+                Route::get('/aduan/{id}', [App\Http\Controllers\AdminAduanController::class, 'show'])->name('aduan.show');
+                Route::put('/aduan/{id}', [App\Http\Controllers\AdminAduanController::class, 'update'])->name('aduan.update');
+            });
     });
 });

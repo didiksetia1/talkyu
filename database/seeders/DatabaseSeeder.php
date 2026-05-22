@@ -25,6 +25,18 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Create BEM Account
+        User::updateOrCreate(
+            ['nim' => 'bem'],
+            [
+                'name' => 'BEM Administrator',
+                'jurusan' => 'Organisasi',
+                'prodi' => 'Kemahasiswaan',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'role' => 'bem'
+            ]
+        );
+
         // Create User Account
         User::updateOrCreate(
             ['nim' => '123456'],

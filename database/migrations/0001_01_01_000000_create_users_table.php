@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('jurusan');
             $table->string('prodi');
             $table->string('password');
-            $table->enum('role', ['admin', 'user'])->default('user');
+            $table->string('role')->default('user');
             $table->rememberToken();
             $table->timestamps();
         });

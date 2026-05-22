@@ -278,11 +278,12 @@
 
 {{-- ======================== CONTENT ======================== --}}
 @section('content')
+@php($isBem = Auth::check() && Auth::user()->role === 'bem')
 <div class="admin-dashboard">
 
     {{-- Header --}}
     <div class="dashboard-header">
-        <h1>Admin Dashboard</h1>
+        <h1>{{ $isBem ? 'BEM Dashboard' : 'Admin Dashboard' }}</h1>
     </div>
 
 
@@ -295,11 +296,13 @@
             <div class="stat-card-value">{{ $totalAgenda }}</div>
         </div>
 
-        <div class="stat-card aduan-card">
-            <div class="stat-card-icon">📋</div>
-            <div class="stat-card-label">Total Aduan</div>
-            <div class="stat-card-value">{{ $totalAduan }}</div>
-        </div>
+        @if ($canViewAduan)
+            <div class="stat-card aduan-card">
+                <div class="stat-card-icon">📋</div>
+                <div class="stat-card-label">Total Aduan</div>
+                <div class="stat-card-value">{{ $totalAduan }}</div>
+            </div>
+        @endif
 
         <div class="stat-card user-card">
             <div class="stat-card-icon">👥</div>
@@ -348,28 +351,30 @@
 
 
         {{-- Aduan Terbaru --}}
-        <div class="card">
-            <div class="card-header">
-                <h2>📋 Aduan Terbaru</h2>
-                <a href="{{ route('admin.aduan.index') }}">Lihat Semua →</a>
-            </div>
+        @if ($canViewAduan)
+            <div class="card">
+                <div class="card-header">
+                    <h2>📋 Aduan Terbaru</h2>
+                    <a href="{{ route('admin.aduan.index') }}">Lihat Semua →</a>
+                </div>
 
-            @if ($recentAduans->count() > 0)
-                @foreach ($recentAduans as $aduan)
-                    <div class="list-item">
-                        <div>
-                            <p class="item-title">{{ $aduan->judul }}</p>
-                            <p class="item-meta">{{ $aduan->created_at->format('d M Y') }}</p>
+                @if ($recentAduans->count() > 0)
+                    @foreach ($recentAduans as $aduan)
+                        <div class="list-item">
+                            <div>
+                                <p class="item-title">{{ $aduan->judul }}</p>
+                                <p class="item-meta">{{ $aduan->created_at->format('d M Y') }}</p>
+                            </div>
+                            <span class="item-badge badge-{{ $aduan->status ?? 'pending' }}">
+                                {{ ucfirst($aduan->status ?? 'pending') }}
+                            </span>
                         </div>
-                        <span class="item-badge badge-{{ $aduan->status ?? 'pending' }}">
-                            {{ ucfirst($aduan->status ?? 'pending') }}
-                        </span>
-                    </div>
-                @endforeach
-            @else
-                <div class="empty-state">Belum ada aduan</div>
-            @endif
-        </div>
+                    @endforeach
+                @else
+                    <div class="empty-state">Belum ada aduan</div>
+                @endif
+            </div>
+        @endif
 
 
         {{-- Aspirasi Terbaru --}}
@@ -400,21 +405,23 @@
     <div class="bottom-grid">
 
         {{-- Distribusi Status Aduan --}}
-        <div class="card">
-            <div class="card-header">
-                <h2>📊 Distribusi Status Aduan</h2>
+        @if ($canViewAduan)
+            <div class="card">
+                <div class="card-header">
+                    <h2>📊 Distribusi Status Aduan</h2>
+                </div>
+                <div class="dist-row">
+                    @forelse ($aduanStatusDistribution as $status => $count)
+                        <div class="dist-item">
+                            <div class="dist-num">{{ $count }}</div>
+                            <div class="dist-label">{{ $status }}</div>
+                        </div>
+                    @empty
+                        <div class="empty-state" style="width: 100%;">Belum ada data</div>
+                    @endforelse
+                </div>
             </div>
-            <div class="dist-row">
-                @forelse ($aduanStatusDistribution as $status => $count)
-                    <div class="dist-item">
-                        <div class="dist-num">{{ $count }}</div>
-                        <div class="dist-label">{{ $status }}</div>
-                    </div>
-                @empty
-                    <div class="empty-state" style="width: 100%;">Belum ada data</div>
-                @endforelse
-            </div>
-        </div>
+        @endif
 
 
         {{-- Aksi Cepat --}}
@@ -425,7 +432,9 @@
             <div class="action-row">
                 <a href="{{ route('admin.agenda.create') }}" class="btn-action primary">Buat Agenda Baru</a>
                 <a href="{{ route('admin.agenda.index') }}" class="btn-action">Kelola Agenda</a>
-                <a href="{{ route('admin.aduan.index') }}" class="btn-action">Kelola Aduan</a>
+                @if ($canViewAduan)
+                    <a href="{{ route('admin.aduan.index') }}" class="btn-action">Kelola Aduan</a>
+                @endif
             </div>
         </div>
 

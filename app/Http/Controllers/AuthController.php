@@ -28,6 +28,10 @@ class AuthController extends Controller
                 return redirect()->intended('/admin/aduan');
             }
 
+            if (Auth::user()->role === 'bem') {
+                return redirect()->intended('/admin');
+            }
+
             return redirect()->intended('/home');
         }
 
