@@ -244,7 +244,7 @@
             if (data.success) {
                 location.reload();
             } else {
-                alert('Gagal mengirim komentar.');
+                alert(data.message || 'Gagal mengirim komentar.');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Kirim Komentar';
             }

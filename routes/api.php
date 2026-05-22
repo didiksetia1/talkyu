@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Agenda
     Route::get('/agenda', [AgendaController::class, 'index']);
     Route::get('/agenda/{id}', [AgendaController::class, 'show']);
+    Route::get('/agenda/{id}/comments', [AgendaController::class, 'comments']);
     Route::post('/agenda/{id}/comment', [AgendaController::class, 'comment']);
     Route::post('/agenda/{id}/like', [AgendaController::class, 'toggleLike']);
 
