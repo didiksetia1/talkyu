@@ -152,7 +152,7 @@
             
 
 
-            <form action="{{ route('aspirasi.store', $event->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ isset($event) ? route('aspirasi.store.with_event', $event->id) : route('aspirasi.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
                 <div class="form-group">

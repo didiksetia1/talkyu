@@ -35,7 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/aspirasi/create', [AspirasiController::class, 'create'])->name('aspirasi.create');
     Route::get('/aspirasi', [AspirasiController::class, 'index'])->name('aspirasi.index');
     Route::get('/aspirasi/{id}', [AspirasiController::class, 'show'])->name('aspirasi.show');
-    Route::post('/aspirasi/{id}', [AspirasiController::class, 'store'])->name('aspirasi.store');
+    Route::post('/aspirasi', [AspirasiController::class, 'store'])->name('aspirasi.store');
+    Route::post('/aspirasi/{id}', [AspirasiController::class, 'store'])->name('aspirasi.store.with_event');
 
     // Aspirasi Routes - List & View Submissions
     Route::get('/aspirasi-list', [AspirasiController::class, 'list'])->name('aspirasi.list');

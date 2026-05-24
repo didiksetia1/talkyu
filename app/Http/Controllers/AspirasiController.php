@@ -14,12 +14,7 @@ class AspirasiController extends Controller
     public function create()
     {
         $event = AspirasiEvent::where('is_active', true)->latest()->first();
-
-        if (!$event) {
-            return redirect()->route('aspirasi.home')->with('error', 'Belum ada form aspirasi yang aktif saat ini.');
-        }
-
-        return redirect()->route('aspirasi.show', $event->id);
+        return view('aspirasi.show', compact('event'));
     }
 
     // List all active aspirasi events (for form submission)
@@ -31,14 +26,20 @@ class AspirasiController extends Controller
     // Show form for specific event
     public function show($id)
     {
-        $event = AspirasiEvent::where('is_active', true)->findOrFail($id);
+        $event = AspirasiEvent::findOrFail($id);
         return view('aspirasi.show', compact('event'));
     }
 
     // Store new aspirasi submission
-    public function store(Request $request, $id)
+    public function store(Request $request, $id = null)
     {
-        $event = AspirasiEvent::where('is_active', true)->findOrFail($id);
+        $event = null;
+
+        if ($id) {
+            $event = AspirasiEvent::findOrFail($id);
+        } else {
+            $event = AspirasiEvent::where('is_active', true)->latest()->first();
+        }
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -63,7 +64,7 @@ class AspirasiController extends Controller
         }
 
         $validated['is_anonim'] = $request->has('anonim');
-        $validated['aspirasi_event_id'] = $event->id;
+        $validated['aspirasi_event_id'] = $event?->id;
         $validated['user_id'] = auth()->id();
         $validated['status'] = 'submitted';
 
