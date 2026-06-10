@@ -7,6 +7,8 @@ use App\Models\Aspirasi;
 use App\Models\AspirasiEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AspirasiController extends Controller
 {
@@ -68,6 +70,14 @@ class AspirasiController extends Controller
             'anonim' => 'nullable|boolean',
         ]);
 
+        // AI Spam Filtering
+        $inputText = $validated['judul'] . ' ' . $validated['deskripsi'] . ' ' . ($validated['tujuan_manfaat'] ?? '');
+        if ($this->isSpamWithAI($inputText)) {
+            return response()->json([
+                'message' => 'Sistem AI mendeteksi aspirasi Anda terindikasi spam atau mengandung kata-kata yang tidak pantas.',
+            ], 422);
+        }
+
         if ($request->hasFile('lampiran')) {
             $validated['lampiran'] = $request->file('lampiran')->store('aspirasi_lampiran', 'public');
         }
@@ -128,6 +138,13 @@ class AspirasiController extends Controller
             'comment' => 'required|string|max:1000',
         ]);
 
+        // AI Spam Filtering
+        if ($this->isSpamWithAI($validated['comment'])) {
+            return response()->json([
+                'message' => 'Sistem AI mendeteksi komentar Anda terindikasi spam atau tidak pantas.',
+            ], 422);
+        }
+
         DB::table('aspirasi_comments')->insert([
             'aspirasi_id' => $id,
             'user_id' => auth()->id(),
@@ -139,5 +156,60 @@ class AspirasiController extends Controller
         $aspirasi->increment('comments_count');
 
         return response()->json(['message' => 'Komentar berhasil ditambahkan.'], 201);
+    }
+
+    private function isSpamWithAI($text)
+    {
+        $manualCheck = function($t) {
+            $badWords = ['gratis', 'spam', 'judi', 'judol', 'pinjol', 'slot', 'promo', 'jembut', 'kasar', 'porno', 'kontol', 'memek', 'bangsat', 'anjing', 'babi'];
+            $textLower = strtolower($t);
+            foreach ($badWords as $word) {
+                if (strpos($textLower, $word) !== false) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        $apiKey = env('GEMINI_API_KEY');
+        if (empty($apiKey) || strpos($apiKey, 'contoh_api_key') !== false) {
+            return $manualCheck($text);
+        }
+
+        try {
+            $prompt = "Tugas Anda adalah mendeteksi apakah teks berikut adalah spam, promosi, atau mengandung kata-kata tidak pantas/kasar (seperti judi online, pinjol) dalam konteks aplikasi penyampaian aspirasi kampus. Jawab HANYA dengan 'YA' jika teks tersebut adalah spam/tidak pantas, dan 'TIDAK' jika teks tersebut wajar atau bersih. Teks: " . $text;
+
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->timeout(10)->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=' . $apiKey, [
+                'contents' => [
+                    ['parts' => [['text' => $prompt]]]
+                ]
+            ]);
+
+            if ($response->successful()) {
+                $aiAnswer = trim($response->json('candidates.0.content.parts.0.text') ?? '');
+
+                if (empty($aiAnswer)) {
+                    Log::warning('Gemini empty answer (Possible safety block) for text: ' . $text);
+                    return true;
+                }
+
+                Log::info('Gemini Answer: ' . $aiAnswer . ' for text: ' . $text);
+
+                $aiAnswerUpper = strtoupper($aiAnswer);
+                if (strpos($aiAnswerUpper, 'YA') !== false) {
+                    return true;
+                }
+
+                return $manualCheck($text);
+            } else {
+                Log::error('Gemini API Error Response: ' . $response->body());
+            }
+        } catch (\Exception $e) {
+            Log::error('Gemini API Exception: ' . $e->getMessage());
+        }
+
+        return $manualCheck($text);
     }
 }
