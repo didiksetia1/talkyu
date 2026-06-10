@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\AspirasiController;
 
 // Public API routes
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
 // Protected API routes (memerlukan token)
 Route::middleware('auth:sanctum')->group(function () {
