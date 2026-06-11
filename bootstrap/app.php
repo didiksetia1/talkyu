@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.or.bem' => IsAdminOrBem::class,
             'admin.only' => IsAdmin::class,
         ]);
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

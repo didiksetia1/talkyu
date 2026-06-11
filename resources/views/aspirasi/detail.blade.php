@@ -183,6 +183,7 @@
 
         fetch("{{ route('aspirasi.vote', $aspirasi->id) }}", {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 'Accept': 'application/json'
@@ -232,6 +233,7 @@
 
         fetch("{{ route('aspirasi.comment', $aspirasi->id) }}", {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 'Content-Type': 'application/json',
