@@ -153,29 +153,35 @@ class AspirasiController extends Controller
     // Comment on aspirasi
     public function comment(Request $request, $id)
     {
-        $aspirasi = Aspirasi::findOrFail($id);
+        try {
+            $aspirasi = Aspirasi::findOrFail($id);
 
-        $validated = $request->validate([
-            'comment' => 'required|string|max:1000',
-        ]);
+            $validated = $request->validate([
+                'comment' => 'required|string|max:1000',
+            ]);
 
-        // AI Spam Filtering (Gemini Fallback ke Manual)
-        if ($this->isSpamWithAI($validated['comment'])) {
-            return response()->json(['success' => false, 'message' => 'Sistem AI mendeteksi komentar Anda terindikasi spam atau tidak pantas.']);
+            // AI Spam Filtering (Gemini Fallback ke Manual)
+            if ($this->isSpamWithAI($validated['comment'])) {
+                return response()->json(['success' => false, 'message' => 'Sistem AI mendeteksi komentar Anda terindikasi spam atau tidak pantas.']);
+            }
+
+            DB::table('aspirasi_comments')->insert([
+                'aspirasi_id' => $id,
+                'user_id' => auth()->id(),
+                'text' => $validated['comment'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $aspirasi->increment('comments_count');
+
+            return response()->json(['success' => true, 'message' => 'Comment added']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['success' => false, 'message' => 'Komentar tidak valid. Pastikan komentar diisi dan tidak melebihi 1000 karakter.'], 422);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Comment error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan pada server. Silakan coba lagi.'], 500);
         }
-
-
-        DB::table('aspirasi_comments')->insert([
-            'aspirasi_id' => $id,
-            'user_id' => auth()->id(),
-            'text' => $validated['comment'],
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        $aspirasi->increment('comments_count');
-
-        return response()->json(['success' => true, 'message' => 'Comment added']);
     }
 
     private function isSpamWithAI($text)

@@ -239,7 +239,12 @@
             },
             body: JSON.stringify({ comment: text })
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                return res.json().then(err => { throw err; });
+            }
+            return res.json();
+        })
         .then(data => {
             if (data.success) {
                 location.reload();
@@ -251,7 +256,7 @@
         })
         .catch(err => {
             console.error(err);
-            alert('Terjadi kesalahan.');
+            alert(err.message || 'Terjadi kesalahan. Silakan coba lagi.');
             submitBtn.disabled = false;
             submitBtn.innerHTML = 'Kirim Komentar';
         });
