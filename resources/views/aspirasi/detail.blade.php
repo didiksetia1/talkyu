@@ -117,9 +117,24 @@
         @endif
 
         @if($aspirasi->lampiran)
+            @php
+                $lampiranPath = $aspirasi->lampiran;
+                $lampiranUrl = Storage::url($lampiranPath);
+                $ext = strtolower(pathinfo($lampiranPath, PATHINFO_EXTENSION));
+                $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+            @endphp
             <div class="lampiran-box">
-                <div class="section-title" style="margin-bottom: 5px;">📎 Lampiran Tersedia</div>
-                <a href="{{ Storage::url($aspirasi->lampiran) }}" target="_blank" style="color: #b91c1c; font-weight: 600; text-decoration: none;">Lihat File Lampiran</a>
+                <div class="section-title" style="margin-bottom: 10px;">📎 Lampiran</div>
+                @if($isImage)
+                    <a href="{{ $lampiranUrl }}" target="_blank">
+                        <img src="{{ $lampiranUrl }}" alt="Lampiran" style="max-width: 100%; max-height: 400px; border-radius: 8px; cursor: pointer; object-fit: contain;">
+                    </a>
+                    <div style="margin-top: 8px; font-size: 12px; color: #6b7280;">
+                        <a href="{{ $lampiranUrl }}" target="_blank" style="color: #b91c1c; text-decoration: none;">Buka ukuran penuh ↗</a>
+                    </div>
+                @else
+                    <a href="{{ $lampiranUrl }}" target="_blank" style="color: #b91c1c; font-weight: 600; text-decoration: none;">Lihat File Lampiran ↗</a>
+                @endif
             </div>
         @endif
 
