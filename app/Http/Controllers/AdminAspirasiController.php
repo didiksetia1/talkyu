@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aspirasi;
+use App\Exports\AspirasiExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminAspirasiController extends Controller
 {
@@ -56,5 +58,19 @@ class AdminAspirasiController extends Controller
         ]);
 
         return response()->json(['success' => true, 'message' => 'Response saved successfully']);
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $filename = 'aspirasi_' . now()->format('Y-m-d') . '.xlsx';
+
+        return Excel::download(
+            new AspirasiExport(
+                $request->status,
+                $request->kategori,
+                $request->q
+            ),
+            $filename
+        );
     }
 }

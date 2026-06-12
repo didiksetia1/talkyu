@@ -209,6 +209,14 @@
         background: #4b5563;
     }
 
+    .btn-export {
+        background: #10b981;
+    }
+
+    .btn-export:hover {
+        background: #059669;
+    }
+
     .form-modal {
         background: white;
         border: 1px solid #e5e7eb;
@@ -335,6 +343,10 @@
             <div class="filter-group">
                 <label>&nbsp;</label>
                 <button type="submit" class="btn-action">Filter</button>
+            </div>
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <a href="{{ route('admin.aspirasi.export', request()->query()) }}" class="btn-action btn-export">Export Excel</a>
             </div>
         </form>
     </div>

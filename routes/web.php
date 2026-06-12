@@ -78,6 +78,7 @@ Route::middleware('auth')->group(function () {
 
             // Aspirasi Routes
             Route::get('/aspirasi', [App\Http\Controllers\AdminAspirasiController::class, 'index'])->name('aspirasi.index');
+            Route::get('/aspirasi/export', [App\Http\Controllers\AdminAspirasiController::class, 'exportExcel'])->name('aspirasi.export');
             Route::post('/aspirasi/{id}/respond', [App\Http\Controllers\AdminAspirasiController::class, 'respond'])->name('aspirasi.respond');
 
             Route::middleware([IsAdmin::class])->group(function () {
