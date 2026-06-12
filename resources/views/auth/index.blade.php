@@ -362,6 +362,9 @@
                     <input type="text" name="nim" placeholder="NIM" required value="{{ old('nim') }}">
                 </div>
                 <div class="input-group">
+                    <input type="email" name="email" placeholder="Email" required value="{{ old('email') }}">
+                </div>
+                <div class="input-group">
                     <select name="jurusan" id="fakultas-select" required>
                         <option value="" disabled selected>Pilih Fakultas</option>
                         <option value="Fakultas Teknik Telekomunikasi dan Elektro (FTTE)">Fakultas Teknik Telekomunikasi dan Elektro (FTTE)</option>
@@ -399,6 +402,7 @@
                 <div class="input-group">
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
+                <a href="{{ route('password.request') }}" style="display:block;text-align:right;margin-bottom:16px;font-size:13px;color:#b91c1c;text-decoration:none;">Lupa Password?</a>
                 <button type="submit" class="btn">Masuk</button>
             </form>
         </div>
