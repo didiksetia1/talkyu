@@ -72,9 +72,6 @@
         justify-content: center;
         margin: 0 auto 20px;
         color: #b91c1c;
-        font-size: 40px;
-        font-weight: 600;
-        line-height: 1;
     }
 
     .action-card h3 {
@@ -108,7 +105,9 @@
     <div class="cards-container">
         <a href="{{ isset($event) ? route('aspirasi.show', $event->id) : route('aspirasi.create') }}" class="action-card">
             <div class="icon-circle">
-                <i class="fas fa-lightbulb"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="40" height="40">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+                </svg>
             </div>
             <h3>Buat Aspirasi Baru</h3>
             <p>Sampaikan kritik, saran, dan masukan Anda melalui form aspirasi.</p>
@@ -116,7 +115,9 @@
 
         <a href="{{ route('aspirasi.list') }}" class="action-card">
             <div class="icon-circle">
-                <i class="fas fa-comments"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="40" height="40">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+                </svg>
             </div>
             <h3>Lihat Aspirasi</h3>
             <p>Lihat aspirasi yang sudah masuk, termasuk vote, komentar, dan status tindak lanjut.</p>

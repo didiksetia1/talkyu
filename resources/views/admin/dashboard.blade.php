@@ -311,7 +311,7 @@
         </div>
 
         <div class="stat-card aspirasi-card">
-            <div class="stat-card-icon">💡</div>
+            <div class="stat-card-icon"></div>
             <div class="stat-card-label">Total Aspirasi</div>
             <div class="stat-card-value">{{ $totalAspirasi }}</div>
         </div>
@@ -380,7 +380,7 @@
         {{-- Aspirasi Terbaru --}}
         <div class="card">
             <div class="card-header">
-                <h2>💡 Aspirasi Terbaru</h2>
+                <h2>Aspirasi Terbaru</h2>
             </div>
 
             @if ($recentAspirasis->count() > 0)
