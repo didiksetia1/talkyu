@@ -17,7 +17,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'nim' => ['required', 'string'],
+            'nim' => ['required', 'string', 'regex:/^(admin|bem|\d+)$/'],
             'password' => ['required', 'string'],
         ]);
 
@@ -44,7 +44,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'nama' => ['required', 'string', 'max:255'],
-            'nim' => ['required', 'string', 'max:255', 'unique:users'],
+            'nim' => ['required', 'numeric', 'digits_between:8,20', 'unique:users'],
             'jurusan' => ['required', 'string', 'max:255'],
             'prodi' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8'],
