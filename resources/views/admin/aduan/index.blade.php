@@ -359,7 +359,7 @@
             </div>
             <div class="filter-group">
                 <label>&nbsp;</label>
-                <a href="{{ route('admin.aduan.export', request()->query()) }}" class="btn-action btn-export">Export CSV</a>
+                <a href="{{ route('admin.aduan.export', request()->query()) }}" class="btn-action btn-export">Export Excel</a>
             </div>
         </form>
     </div>

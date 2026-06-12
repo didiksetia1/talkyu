@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Aduan;
+use App\Exports\AduanExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminAduanController extends Controller
 {
@@ -88,56 +90,17 @@ class AdminAduanController extends Controller
                          ->with('success', 'Status dan Tanggapan berhasil diperbarui!');
     }
 
-    public function exportCsv(Request $request)
+    public function exportExcel(Request $request)
     {
-        $query = Aduan::with('user')->latest();
+        $filename = 'aduan_' . now()->format('Y-m-d') . '.xlsx';
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->filled('kategori')) {
-            $query->where('kategori', $request->kategori);
-        }
-
-        if ($request->filled('q')) {
-            $search = $request->q;
-            $query->where(function ($q) use ($search) {
-                $q->where('judul', 'like', "%{$search}%")
-                  ->orWhere('deskripsi', 'like', "%{$search}%");
-            });
-        }
-
-        $aduans = $query->get();
-
-        $filename = 'aduan_' . now()->format('Y-m-d') . '.csv';
-        $headers = [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-        ];
-
-        $callback = function () use ($aduans) {
-            $file = fopen('php://output', 'w');
-            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($file, ['No', 'Judul', 'Kategori', 'Deskripsi', 'Pengirim', 'Tanggal', 'Status', 'Tanggapan', 'Tgl Tanggapan']);
-
-            foreach ($aduans as $index => $aduan) {
-                fputcsv($file, [
-                    $index + 1,
-                    $aduan->judul ?? '-',
-                    $aduan->kategori ?? '-',
-                    $aduan->deskripsi ?? '-',
-                    $aduan->user?->name ?? 'Anonim',
-                    $aduan->created_at ? $aduan->created_at->format('d/m/Y') : '-',
-                    ucfirst(str_replace('_', ' ', $aduan->status)),
-                    $aduan->tanggapan ?? '-',
-                    $aduan->updated_at ? $aduan->updated_at->format('d/m/Y') : '-',
-                ]);
-            }
-
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        return Excel::download(
+            new AduanExport(
+                $request->status,
+                $request->kategori,
+                $request->q
+            ),
+            $filename
+        );
     }
 }
