@@ -6,7 +6,7 @@
 <style>
     .page-header {
         margin-bottom: 40px;
-        text-align: center;
+        text-align: left;
     }
 
     .page-header h1 {
@@ -96,61 +96,71 @@
         text-decoration: none;
         font-weight: 600;
     }
-    
+
     .btn-back:hover {
         text-decoration: underline;
+    }
+
+    .content-wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
     }
 </style>
 @endsection
 
 @section('content')
 <div class="container">
-    <a href="{{ route('aduan.index') }}" class="btn-back">← Kembali ke Halaman Utama Aduan</a>
+    <div class="content-wrapper">
 
-    <div class="page-header">
-        <h1>Buat Pengaduan</h1>
-        <p>Sampaikan keluhan dan aduan Anda secara rinci agar segera dapat diproses.</p>
-    </div>
+        <a href="{{ route('aduan.index') }}" class="btn-back">← Kembali ke Halaman Utama Aduan</a>
 
-    <div class="form-container">
-        <div class="aduan-form-card">
-            <form action="{{ route('aduan.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group">
-                    <label for="kategori">Kategori</label>
-                    <select id="kategori" name="kategori" class="form-control" required>
-                        <option value="">-- Pilih Kategori --</option>
-                        <option value="Perkuliahan">Perkuliahan</option>
-                        <option value="Penilaian & Nilai">Penilaian & Nilai</option>
-                        <option value="Dosen & Pengajar">Dosen & Pengajar</option>
-                        <option value="Administrasi Akademik">Administrasi Akademik</option>
-                        <option value="Etika & Pelanggaran akademik">Etika & Pelanggaran akademik</option>
-                        <option value="Bimbingan & Skripsi">Bimbingan & Skripsi</option>
-                    </select>
-                    @error('kategori') <span style="color:#dc2626; font-size:13px">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="judul">Topik / Judul Aduan</label>
-                    <input type="text" id="judul" name="judul" class="form-control" required placeholder="Contoh: AC Kelas Rusak">
-                    @error('judul') <span style="color:#dc2626; font-size:13px">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="deskripsi">Deskripsi Detail</label>
-                    <textarea id="deskripsi" name="deskripsi" class="form-control" required placeholder="Jelaskan secara detail mengenai aduan Anda..."></textarea>
-                    @error('deskripsi') <span style="color:#dc2626; font-size:13px">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="gambar">Bukti Foto (Opsional)</label>
-                    <input type="file" id="gambar" name="gambar" class="form-control" accept="image/*">
-                    @error('gambar') <span style="color:#dc2626; font-size:13px">{{ $message }}</span> @enderror
-                </div>
-
-                <button type="submit" class="btn-submit">Kirim Pengaduan</button>
-            </form>
+        <div class="page-header">
+            <h1>Buat Pengaduan</h1>
+            <p>Sampaikan keluhan dan aduan Anda secara rinci agar segera dapat diproses.</p>
         </div>
+
+        <div class="form-container">
+            <div class="aduan-form-card">
+                <form action="{{ route('aduan.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="kategori">Kategori</label>
+                        <select id="kategori" name="kategori" class="form-control" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            <option value="Perkuliahan">Perkuliahan</option>
+                            <option value="Penilaian & Nilai">Penilaian & Nilai</option>
+                            <option value="Dosen & Pengajar">Dosen & Pengajar</option>
+                            <option value="Administrasi Akademik">Administrasi Akademik</option>
+                            <option value="Etika & Pelanggaran akademik">Etika & Pelanggaran akademik</option>
+                            <option value="Bimbingan & Skripsi">Bimbingan & Skripsi</option>
+                        </select>
+                        @error('kategori') <span style="color:#dc2626; font-size:13px">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="judul">Topik / Judul Aduan</label>
+                        <input type="text" id="judul" name="judul" class="form-control" required placeholder="Contoh: AC Kelas Rusak">
+                        @error('judul') <span style="color:#dc2626; font-size:13px">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deskripsi">Deskripsi Detail</label>
+                        <textarea id="deskripsi" name="deskripsi" class="form-control" required placeholder="Jelaskan secara detail mengenai aduan Anda..."></textarea>
+                        @error('deskripsi') <span style="color:#dc2626; font-size:13px">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gambar">Bukti Foto (Opsional)</label>
+                        <input type="file" id="gambar" name="gambar" class="form-control" accept="image/*">
+                        @error('gambar') <span style="color:#dc2626; font-size:13px">{{ $message }}</span> @enderror
+                    </div>
+
+                    <button type="submit" class="btn-submit">Kirim Pengaduan</button>
+                </form>
+            </div>
+        </div>
+
     </div>
 </div>
 @endsection

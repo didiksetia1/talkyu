@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Admin - Kelola Aspirasi')
+@section('page_title', 'Kelola Aspirasi')
 
 @section('styles')
 <style>
@@ -284,10 +285,7 @@
 @endsection
 
 @section('content')
-<div class="admin-container">
-    <div class="page-header">
-        <h1>Kelola Aspirasi</h1>
-    </div>
+<div class="admin-container" style="margin-top: 30px !important;">
 
     <!-- Stats -->
     <div class="stats-overview">
@@ -431,6 +429,9 @@
     @endif
 </div>
 
+@endsection
+
+@section('scripts')
 <script>
 function openResponseForm(id) {
     document.getElementById(`form-${id}`).style.display = 'block';

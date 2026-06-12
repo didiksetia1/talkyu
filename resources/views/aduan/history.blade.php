@@ -4,9 +4,15 @@
 
 @section('styles')
 <style>
+    .content-wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
     .page-header {
         margin-bottom: 40px;
-        text-align: center;
+        text-align: left;
     }
 
     .page-header h1 {
@@ -18,14 +24,11 @@
         -webkit-text-fill-color: transparent;
     }
 
-    /* Timeline Styles */
     .aduan-list-card {
         background: rgba(255, 255, 255, 0.7);
         border-radius: 20px;
         padding: 30px 26px;
         border: 1px solid rgba(220, 38, 38, 0.1);
-        max-width: 800px;
-        margin: 0 auto;
     }
 
     .timeline {
@@ -109,7 +112,6 @@
         text-transform: uppercase;
     }
 
-    /* New Statuses */
     .status-dikirim { background: #e0f2fe; color: #0284c7; }
     .status-ditinjau { background: #fef08a; color: #854d0e; }
     .status-diproses { background: #fed7aa; color: #c2410c; }
@@ -248,6 +250,18 @@
         color: rgba(127, 29, 29, 0.5);
     }
 
+    .btn-back {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #b91c1c;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .btn-back:hover {
+        text-decoration: underline;
+    }
+
     @media (max-width: 640px) {
         .aduan-list-card {
             padding: 20px 16px;
@@ -267,106 +281,98 @@
             gap: 8px;
         }
     }
-
-    .btn-back {
-        display: inline-block;
-        margin-bottom: 20px;
-        color: #b91c1c;
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    .btn-back:hover {
-        text-decoration: underline;
-    }
 </style>
 @endsection
 
 @section('content')
 <div class="container">
-    <a href="{{ route('aduan.index') }}" class="btn-back">← Kembali ke Halaman Utama Aduan</a>
+    <div class="content-wrapper">
 
-    <div class="page-header">
-        <h1>Riwayat Pengaduan Saya</h1>
-    </div>
+        <a href="{{ route('aduan.index') }}" class="btn-back">← Kembali ke Halaman Utama Aduan</a>
 
-    <div class="aduan-list-card">
-        @forelse($aduans as $aduan)
-            @if($loop->first)
-                <div class="timeline">
-            @endif
+        <div class="page-header">
+            <h1>Riwayat Pengaduan Saya</h1>
+        </div>
 
-            <div class="timeline-item">
-                <span class="timeline-dot" aria-hidden="true"></span>
-                <div class="aduan-item">
-                    <div class="aduan-header">
-                        <span class="aduan-title">{{ $aduan->judul }}</span>
-                        <span class="aduan-status status-{{ $aduan->status }}">{{ $aduan->status }}</span>
-                    </div>
-                    <div>
-                        <span class="aduan-category">{{ $aduan->kategori }}</span>
-                    </div>
-
-                    @php
-                        $statusFlow = ['dikirim', 'ditinjau', 'diproses', 'selesai'];
-                        $currentStatusIndex = array_search($aduan->status, $statusFlow, true);
-                        $statusDates = [
-                            'dikirim' => $aduan->created_at,
-                            'ditinjau' => $aduan->ditinjau_at,
-                            'diproses' => $aduan->diproses_at,
-                            'selesai' => $aduan->selesai_at,
-                        ];
-                        if ($currentStatusIndex === false) {
-                            $currentStatusIndex = 0;
-                        }
-                    @endphp
-
-                    <div class="status-progress" aria-label="Timeline status aduan">
-                        <span class="status-progress-title">Timeline Status</span>
-                        @foreach($statusFlow as $step)
-                            @php
-                                $stepIndex = $loop->index;
-                                $stepState = $stepIndex < $currentStatusIndex
-                                    ? 'done'
-                                    : ($stepIndex === $currentStatusIndex ? 'current' : 'todo');
-                            @endphp
-                            <div class="status-step-row {{ $stepState }}">
-                                <span class="step-dot" aria-hidden="true"></span>
-                                <div class="step-text">
-                                    <span class="step-label">{{ ucfirst($step) }}</span>
-                                    @if(!empty($statusDates[$step]))
-                                        <span class="step-date">{{ $statusDates[$step]->format('d M Y, H:i') }}</span>
-                                    @elseif($stepIndex <= $currentStatusIndex)
-                                        <span class="step-date step-date-missing">Tanggal belum tercatat</span>
-                                    @endif
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <p class="aduan-desc">{{ $aduan->deskripsi }}</p>
-
-                    @if($aduan->tanggapan)
-                    <div class="aduan-tanggapan">
-                        <span class="tanggapan-label">Tanggapan dari Akademik:</span>
-                        <div class="tanggapan-text">{{ $aduan->tanggapan }}</div>
-                    </div>
-                    @endif
-
-                    <div class="aduan-meta">
-                        Dikirim pada: {{ $aduan->created_at->format('d M Y, H:i') }}
-                    </div>
-                </div>
-            </div>
-
-            @if($loop->last)
-                </div>
+        <div class="aduan-list-card">
+            @forelse($aduans as $aduan)
+                @if($loop->first)
+                    <div class="timeline">
                 @endif
-        @empty
-            <div style="text-align: center; color: rgba(127, 29, 29, 0.6); padding: 30px;">
-                Anda belum mengirimkan aduan apapun.
-            </div>
-        @endforelse
+
+                <div class="timeline-item">
+                    <span class="timeline-dot" aria-hidden="true"></span>
+                    <div class="aduan-item">
+                        <div class="aduan-header">
+                            <span class="aduan-title">{{ $aduan->judul }}</span>
+                            <span class="aduan-status status-{{ $aduan->status }}">{{ $aduan->status }}</span>
+                        </div>
+                        <div>
+                            <span class="aduan-category">{{ $aduan->kategori }}</span>
+                        </div>
+
+                        @php
+                            $statusFlow = ['dikirim', 'ditinjau', 'diproses', 'selesai'];
+                            $currentStatusIndex = array_search($aduan->status, $statusFlow, true);
+                            $statusDates = [
+                                'dikirim' => $aduan->created_at,
+                                'ditinjau' => $aduan->ditinjau_at,
+                                'diproses' => $aduan->diproses_at,
+                                'selesai' => $aduan->selesai_at,
+                            ];
+                            if ($currentStatusIndex === false) {
+                                $currentStatusIndex = 0;
+                            }
+                        @endphp
+
+                        <div class="status-progress" aria-label="Timeline status aduan">
+                            <span class="status-progress-title">Timeline Status</span>
+                            @foreach($statusFlow as $step)
+                                @php
+                                    $stepIndex = $loop->index;
+                                    $stepState = $stepIndex < $currentStatusIndex
+                                        ? 'done'
+                                        : ($stepIndex === $currentStatusIndex ? 'current' : 'todo');
+                                @endphp
+                                <div class="status-step-row {{ $stepState }}">
+                                    <span class="step-dot" aria-hidden="true"></span>
+                                    <div class="step-text">
+                                        <span class="step-label">{{ ucfirst($step) }}</span>
+                                        @if(!empty($statusDates[$step]))
+                                            <span class="step-date">{{ $statusDates[$step]->format('d M Y, H:i') }}</span>
+                                        @elseif($stepIndex <= $currentStatusIndex)
+                                            <span class="step-date step-date-missing">Tanggal belum tercatat</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <p class="aduan-desc">{{ $aduan->deskripsi }}</p>
+
+                        @if($aduan->tanggapan)
+                        <div class="aduan-tanggapan">
+                            <span class="tanggapan-label">Tanggapan dari Akademik:</span>
+                            <div class="tanggapan-text">{{ $aduan->tanggapan }}</div>
+                        </div>
+                        @endif
+
+                        <div class="aduan-meta">
+                            Dikirim pada: {{ $aduan->created_at->format('d M Y, H:i') }}
+                        </div>
+                    </div>
+                </div>
+
+                @if($loop->last)
+                    </div>
+                @endif
+            @empty
+                <div style="text-align: center; color: rgba(127, 29, 29, 0.6); padding: 30px;">
+                    Anda belum mengirimkan aduan apapun.
+                </div>
+            @endforelse
+        </div>
+
     </div>
 </div>
 @endsection

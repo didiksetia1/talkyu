@@ -9,13 +9,13 @@
         max-width: 1000px;
         margin: 0 auto;
         padding: 20px;
-        margin-top: 100px;
+        margin-top: 30px;
     }
 
     .stats-overview {
         display: flex;
         gap: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 40px;
         flex-wrap: wrap;
     }
 
@@ -293,7 +293,7 @@
 @endsection
 
 @section('content')
-<div class="admin-container">
+<div class="admin-container" style="margin-top: 30px !important;">
 
     <!-- Stats -->
     <div class="stats-overview">
