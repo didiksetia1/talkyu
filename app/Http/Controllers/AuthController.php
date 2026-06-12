@@ -165,7 +165,7 @@ class AuthController extends Controller
             ->delete();
 
         return view('auth.reset-password', [
-            'email' => $email,
+            'email' => $request->email,
             'token' => $request->token,
             'resetSuccess' => true,
         ]);
