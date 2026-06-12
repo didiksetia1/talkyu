@@ -76,7 +76,9 @@
 
 @section('content')
 <div class="container" style="padding: 40px 0; max-width: 900px; margin: 0 auto;">
+    <div style="text-align: center;">
     <a href="{{ route('aspirasi.home') }}" class="btn-back">← Kembali ke Pusat Layanan</a>
+</div>
 
     <div class="page-header">
         <h1>Daftar Aspirasi</h1>
