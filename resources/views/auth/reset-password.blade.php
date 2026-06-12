@@ -86,7 +86,7 @@
     <div class="ambient-circle circle-2"></div>
 
     <div class="card">
-        @if($resetSuccess ?? false)
+        @if(session('resetSuccess'))
             <!-- Success State -->
             <div class="success-icon">✅</div>
             <h2>Password Berhasil Direset</h2>

@@ -143,15 +143,18 @@ class AuthController extends Controller
             ->first();
 
         if (!$resetRecord) {
-            return back()->with('error', 'Token reset password tidak valid.');
+            return redirect()->route('password.reset.form', ['email' => $request->email, 'token' => $request->token])
+                             ->with('error', 'Token reset password tidak valid.');
         }
 
         if (!Hash::check($request->token, $resetRecord->token)) {
-            return back()->with('error', 'Token reset password tidak valid.');
+            return redirect()->route('password.reset.form', ['email' => $request->email, 'token' => $request->token])
+                             ->with('error', 'Token reset password tidak valid.');
         }
 
         if (now()->subMinutes(60)->greaterThan($resetRecord->created_at)) {
-            return back()->with('error', 'Token reset password sudah expired.');
+            return redirect()->route('password.reset.form', ['email' => $request->email, 'token' => $request->token])
+                             ->with('error', 'Token reset password sudah expired.');
         }
 
         $user = User::where('email', $request->email)->first();
@@ -164,10 +167,7 @@ class AuthController extends Controller
             ->where('email', $request->email)
             ->delete();
 
-        return view('auth.reset-password', [
-            'email' => $request->email,
-            'token' => $request->token,
-            'resetSuccess' => true,
-        ]);
+        return redirect()->route('password.reset.form', ['email' => $request->email, 'token' => $request->token])
+                         ->with('resetSuccess', true);
     }
 }
