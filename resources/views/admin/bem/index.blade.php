@@ -14,11 +14,10 @@
 
     .page-header {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         margin-bottom: 25px;
         padding-bottom: 15px;
-        border-bottom: 1px solid #e5e7eb;
     }
 
     .page-header h1 {
@@ -32,20 +31,20 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: #10b981;
-        color: white;
-        padding: 8px 16px;
+        background: #ef4444;
+        color: #fff;
+        padding: 10px 16px;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         cursor: pointer;
-        font-size: 13px;
-        font-weight: 500;
+        font-size: 14px;
+        font-weight: 600;
         text-decoration: none;
         transition: background 0.2s;
     }
 
     .btn-add:hover {
-        background: #059669;
+        background: #dc2626;
     }
 
     .btn-add svg {
@@ -324,12 +323,8 @@
 
     {{-- Header --}}
     <div class="page-header">
-        <h1>Kelola Akun BEM</h1>
         <button class="btn-add" onclick="openModal()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 5v14M5 12h14"/>
-            </svg>
-            Tambah BEM
+            + Tambah BEM
         </button>
     </div>
 
