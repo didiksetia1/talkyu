@@ -46,6 +46,19 @@
         flex-wrap: wrap;
     }
 
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .meta-icon {
+        width: 16px;
+        height: 16px;
+        color: #b91c1c;
+        flex-shrink: 0;
+    }
+
     .aspirasi-desc {
         font-size: 14px;
         color: #374151;
@@ -96,10 +109,34 @@
                     <span class="status-badge" style="background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5;">{{ str_replace('_', ' ', $aspirasi->status) }}</span>
                 </div>
                 <div class="aspirasi-meta">
-                    <span>📁 Kategori: {{ App\Models\Aspirasi::CATEGORIES[$aspirasi->kategori] ?? $aspirasi->kategori }}</span>
-                    <span>👤 {{ $aspirasi->is_anonim ? 'Anonymous' : ($aspirasi->user?->name ?? 'Anonymous') }}</span>
-                    <span>📅 {{ $aspirasi->created_at->format('d M Y') }}</span>
-                    <span>👍 {{ $aspirasi->votes_count }} Votes</span>
+                    <span class="meta-item">
+                        <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Kategori: {{ App\Models\Aspirasi::CATEGORIES[$aspirasi->kategori] ?? $aspirasi->kategori }}
+                    </span>
+                    <span class="meta-item">
+                        <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        {{ $aspirasi->is_anonim ? 'Anonymous' : ($aspirasi->user?->name ?? 'Anonymous') }}
+                    </span>
+                    <span class="meta-item">
+                        <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        {{ $aspirasi->created_at->format('d M Y') }}
+                    </span>
+                    <span class="meta-item">
+                        <svg class="meta-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        {{ $aspirasi->votes_count }} Votes
+                    </span>
                 </div>
                 <div class="aspirasi-desc">
                     {{ Str::limit($aspirasi->deskripsi, 200) }}
