@@ -46,7 +46,7 @@
         /* Container utility */
         .container {
             max-width: 1200px;
-            margin: 50px auto;
+            margin: 80px auto 30px;
             padding: 0 20px;
         }
 

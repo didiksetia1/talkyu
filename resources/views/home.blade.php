@@ -230,7 +230,13 @@
 
         <!-- Left Column: Latest Agendas -->
         <div>
-            <h2 class="section-title">📰 Agenda Terkini</h2>
+            <h2 class="section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7f1d1d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 3h16c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2z"/>
+                    <path d="M4 9h16M4 15h10"/>
+                </svg>
+                Agenda Terkini
+            </h2>
             <div class="latest-agendas">
                 @forelse($latestAgendas ?? [] as $agenda)
                     <div class="agenda-card">
@@ -244,8 +250,19 @@
                                 {{ Str::limit($agenda->title, 50) }}
                             </a>
                             <div class="agenda-meta">
-                                <span>🗓 {{ $agenda->created_at->format('d M Y') }}</span>
-                                <span>❤️ {{ $agenda->likes_count ?? 0 }}</span>
+                                <span style="display: flex; align-items: center; gap: 4px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                        <path d="M3 10h18"/>
+                                    </svg>
+                                    {{ $agenda->created_at->format('d M Y') }}
+                                </span>
+                                <span style="display: flex; align-items: center; gap: 4px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                    </svg>
+                                    {{ $agenda->likes_count ?? 0 }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -261,7 +278,10 @@
         <div>
             @if(isset($popularAgenda) && $popularAgenda)
             <div class="popular-widget">
-                <h2 class="section-title">🔥 Sedang Hangat Dibicarakan</h2>
+                <h2 class="section-title">
+                    <img src="{{ asset('images/fire-svgrepo-com.svg') }}" alt="Fire" width="24" height="24" style="display: inline;">
+                    Sedang Hangat Dibicarakan
+                </h2>
 
                 <a href="{{ route('agenda.show', $popularAgenda->id) }}" class="pop-agenda-title">
                     {{ $popularAgenda->title }}
@@ -272,8 +292,18 @@
                 </p>
 
                 <div class="pop-stats">
-                    <span>❤️ {{ $popularAgenda->likes_count }} Likes</span>
-                    <span>💬 {{ $popularAgenda->comments_count }} Komentar</span>
+                    <span style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                        {{ $popularAgenda->likes_count }} Likes
+                    </span>
+                    <span style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        {{ $popularAgenda->comments_count }} Komentar
+                    </span>
                 </div>
             </div>
             @endif

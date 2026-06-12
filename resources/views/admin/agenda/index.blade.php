@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Admin - Kelola Agenda')
+@section('page_title', 'Kelola Agenda')
 
 @section('styles')
 <style>
@@ -8,22 +9,15 @@
         max-width: 1100px;
         margin: 0 auto;
         padding: 20px;
+        margin-top: 64px;
     }
 
     .page-header {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid rgba(220, 38, 38, 0.1);
         gap: 15px;
-    }
-
-    .page-header h1 {
-        font-size: 28px;
-        color: #7f1d1d;
-        margin: 0;
     }
 
     .btn-add {
@@ -244,7 +238,9 @@
 
 @section('content')
 <div class="admin-container">
-
+    <div class="page-header">
+        <a href="{{ route('admin.agenda.create') }}" class="btn-add">+ Tambah Postingan Agenda</a>
+    </div>
 
     @if(session('success'))
         <div class="alert-success">
@@ -268,8 +264,6 @@
                     @endforeach
                 </select>
             </div>
-
-            <a href="{{ route('admin.agenda.create') }}" class="btn-add">+ Tambah Postingan Agenda</a>
 
             <div class="filter-actions">
                 <button type="submit" class="btn-filter">Terapkan</button>
@@ -306,8 +300,19 @@
                     </td>
                     <td>{{ $agenda->category ?? '-' }}</td>
                     <td>{{ $agenda->created_at->format('d M Y, H:i') }}</td>
-                    <td>
-                        ❤️ {{ $agenda->likes_count }} | 💬 {{ $agenda->comments_count }}
+                    <td style="display: flex; gap: 16px; align-items: center;">
+                        <span style="display: flex; align-items: center; gap: 6px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                            {{ $agenda->likes_count }}
+                        </span>
+                        <span style="display: flex; align-items: center; gap: 6px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            {{ $agenda->comments_count }}
+                        </span>
                     </td>
                     <td>
                         <div class="action-group">
