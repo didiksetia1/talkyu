@@ -70,7 +70,6 @@
     .aduan-card .stat-card-icon svg    { color: #dc2626; }
     .user-card .stat-card-icon svg     { color: #10b981; }
     .aspirasi-card .stat-card-icon svg { color: #f59e0b; }
-    .event-card .stat-card-icon svg    { color: #8b5cf6; }
 
     .stat-card-label {
         font-size: 10px;
@@ -91,7 +90,6 @@
     .stat-card.aduan-card    { border-top: 3px solid #dc2626; }
     .stat-card.user-card     { border-top: 3px solid #10b981; }
     .stat-card.aspirasi-card { border-top: 3px solid #f59e0b; }
-    .stat-card.event-card    { border-top: 3px solid #8b5cf6; }
 
 
     /* ---- Content Grid ---- */
@@ -387,18 +385,6 @@
             </div>
             <div class="stat-card-label">Total Aspirasi</div>
             <div class="stat-card-value">{{ $totalAspirasi }}</div>
-        </div>
-
-        <div class="stat-card event-card">
-            <div class="stat-card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 2v20M2 12h20"/>
-                    <circle cx="12" cy="12" r="3"/>
-                </svg>
-            </div>
-            <div class="stat-card-label">Event Aktif</div>
-            <div class="stat-card-value">{{ $activeEvents }}</div>
         </div>
 
     </div>
