@@ -83,6 +83,7 @@ Route::middleware('auth')->group(function () {
             Route::middleware([IsAdmin::class])->group(function () {
                 // Aduan Routes
                 Route::get('/aduan', [App\Http\Controllers\AdminAduanController::class, 'index'])->name('aduan.index');
+                Route::get('/aduan/export', [App\Http\Controllers\AdminAduanController::class, 'exportCsv'])->name('aduan.export');
                 Route::get('/aduan/{id}', [App\Http\Controllers\AdminAduanController::class, 'show'])->name('aduan.show');
                 Route::put('/aduan/{id}', [App\Http\Controllers\AdminAduanController::class, 'update'])->name('aduan.update');
             });
