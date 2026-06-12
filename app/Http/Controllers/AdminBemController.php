@@ -19,7 +19,7 @@ class AdminBemController extends Controller
     {
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
-            'nim'      => 'required|string|max:20|unique:users,nim',
+            'nim'      => 'required|string|max:20|regex:/^(admin|bem|bem_\d+|\d+)$/|unique:users,nim',
             'email'    => 'required|email|max:255|unique:users,email',
             'jurusan'  => 'nullable|string|max:255',
             'prodi'    => 'nullable|string|max:255',
@@ -47,7 +47,7 @@ class AdminBemController extends Controller
 
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
-            'nim'      => 'required|string|max:20|unique:users,nim,' . $id,
+            'nim'      => 'required|string|max:20|regex:/^(admin|bem|bem_\d+|\d+)$/|unique:users,nim,' . $id,
             'email'    => 'required|email|max:255|unique:users,email,' . $id,
             'jurusan'  => 'nullable|string|max:255',
             'prodi'    => 'nullable|string|max:255',
