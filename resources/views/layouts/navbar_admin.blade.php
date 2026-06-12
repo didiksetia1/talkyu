@@ -98,6 +98,9 @@
             <a href="{{ route('admin.aduan.index') }}">Kelola Aduan</a>
         @endif
         <a href="{{ route('admin.aspirasi.index') }}">Kelola Aspirasi</a>
+        @if(Auth::user()->role === 'admin')
+            <a href="{{ route('admin.bem.index') }}">Kelola BEM</a>
+        @endif
         <form method="POST" action="{{ route('logout') }}" class="logout-form" style="margin:0;">
             @csrf
             <button type="submit" class="admin-btn-logout">Logout</button>

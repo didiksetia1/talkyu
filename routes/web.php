@@ -87,6 +87,13 @@ Route::middleware('auth')->group(function () {
                 Route::get('/aduan/export', [App\Http\Controllers\AdminAduanController::class, 'exportExcel'])->name('aduan.export');
                 Route::get('/aduan/{id}', [App\Http\Controllers\AdminAduanController::class, 'show'])->name('aduan.show');
                 Route::put('/aduan/{id}', [App\Http\Controllers\AdminAduanController::class, 'update'])->name('aduan.update');
+
+                // BEM Routes
+                Route::get('/bem', [App\Http\Controllers\AdminBemController::class, 'index'])->name('bem.index');
+                Route::post('/bem', [App\Http\Controllers\AdminBemController::class, 'store'])->name('bem.store');
+                Route::get('/bem/{id}/edit', [App\Http\Controllers\AdminBemController::class, 'edit'])->name('bem.edit');
+                Route::put('/bem/{id}', [App\Http\Controllers\AdminBemController::class, 'update'])->name('bem.update');
+                Route::delete('/bem/{id}', [App\Http\Controllers\AdminBemController::class, 'destroy'])->name('bem.destroy');
             });
     });
 });
