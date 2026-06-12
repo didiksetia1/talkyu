@@ -140,7 +140,7 @@
 
         @if($aspirasi->bem_response)
             <div class="bem-response">
-                <div style="font-weight: bold; color: #065f46; margin-bottom: 10px;">📢 Tanggapan BEM:</div>
+                <div style="font-weight: bold; color: #065f46; margin-bottom: 10px;">📢 Tanggapan BEM ({{ $aspirasi->responder?->name ?? 'BEM' }}):</div>
                 <div style="color: #064e3b; line-height: 1.6;">{{ $aspirasi->bem_response }}</div>
             </div>
         @endif

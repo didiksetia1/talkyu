@@ -55,6 +55,7 @@ class AdminAspirasiController extends Controller
         $aspirasi->update([
             'status' => $validated['status'],
             'bem_response' => $validated['bem_response'],
+            'responded_by' => auth()->id(),
         ]);
 
         return response()->json(['success' => true, 'message' => 'Response saved successfully']);

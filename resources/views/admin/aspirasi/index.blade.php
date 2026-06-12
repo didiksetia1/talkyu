@@ -390,7 +390,7 @@
 
             @if($aspirasi->bem_response)
             <div class="bem-response-section">
-                <div class="bem-response-title">Response BEM ({{ Auth::user()->name }}):</div>
+                <div class="bem-response-title">Response BEM ({{ $aspirasi->responder?->name ?? 'Unknown' }}):</div>
                 {{ Str::limit($aspirasi->bem_response, 150) }}
                 @if(strlen($aspirasi->bem_response) > 150) ... @endif
             </div>

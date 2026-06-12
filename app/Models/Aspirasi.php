@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Aspirasi extends Model
 {
     protected $fillable = [
-        'aspirasi_event_id', 'user_id', 'kategori', 'judul', 'deskripsi', 'tujuan_manfaat', 'lampiran', 'is_anonim', 'status', 'bem_response', 'votes_count', 'comments_count'
+        'aspirasi_event_id', 'user_id', 'kategori', 'judul', 'deskripsi', 'tujuan_manfaat', 'lampiran', 'is_anonim', 'status', 'bem_response', 'responded_by', 'votes_count', 'comments_count'
     ];
 
     // Kategori Aspirasi
@@ -29,5 +29,10 @@ class Aspirasi extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function responder()
+    {
+        return $this->belongsTo(User::class, 'responded_by');
     }
 }
