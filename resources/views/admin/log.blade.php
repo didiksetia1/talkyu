@@ -202,11 +202,6 @@
 @section('content')
 <div class="log-page">
 
-    <div class="log-header">
-        <h1>Log Aktivitas</h1>
-        <p>Semua aktivitas terbaru dari agenda, aduan, dan aspirasi</p>
-    </div>
-
     <div class="log-card">
         <div class="log-card-header">
             <h2>
