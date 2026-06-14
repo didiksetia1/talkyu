@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Agenda;
 use App\Models\Aduan;
 use App\Models\Aspirasi;
-use App\Models\AspirasiEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -37,24 +36,49 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Status distribution
-        $aduanStatusDistribution = $canViewAduan
-            ? Aduan::selectRaw('status, COUNT(*) as count')
-                ->groupBy('status')
-                ->get()
-                ->pluck('count', 'status')
-                ->toArray()
-            : [];
+        // Recent activity feed (combined from aduan, aspirasi, agenda)
+        $recentActivity = collect();
 
-        // Category distribution for Agenda
-        $agendaCategoryDistribution = Agenda::selectRaw('category, COUNT(*) as count')
-            ->groupBy('category')
-            ->get()
-            ->pluck('count', 'category')
-            ->toArray();
+        // Add recent agendas
+        foreach ($recentAgendas as $agenda) {
+            $recentActivity->push([
+                'type' => 'agenda',
+                'title' => $agenda->title,
+                'meta' => $agenda->category,
+                'date' => $agenda->created_at,
+                'badge' => 'Agenda',
+                'badge_class' => 'badge-dikirim',
+            ]);
+        }
 
-        // Active events
-        $activeEvents = AspirasiEvent::where('is_active', true)->count();
+        // Add recent aduans
+        if ($canViewAduan) {
+            foreach ($recentAduans as $aduan) {
+                $recentActivity->push([
+                    'type' => 'aduan',
+                    'title' => $aduan->judul,
+                    'meta' => $aduan->status ?? 'pending',
+                    'date' => $aduan->created_at,
+                    'badge' => ucfirst($aduan->status ?? 'pending'),
+                    'badge_class' => 'badge-' . ($aduan->status ?? 'pending'),
+                ]);
+            }
+        }
+
+        // Add recent aspirasis
+        foreach ($recentAspirasis as $aspirasi) {
+            $recentActivity->push([
+                'type' => 'aspirasi',
+                'title' => $aspirasi->judul ?? 'Aspirasi',
+                'meta' => $aspirasi->user?->name ?? 'Anonymous',
+                'date' => $aspirasi->created_at,
+                'badge' => 'Aspirasi',
+                'badge_class' => 'badge-aspirasi',
+            ]);
+        }
+
+        // Sort by date descending, take 15
+        $recentActivity = $recentActivity->sortByDesc('date')->take(15)->values();
 
         return view('admin.dashboard', compact(
             'totalAgenda',
@@ -64,9 +88,7 @@ class AdminDashboardController extends Controller
             'recentAgendas',
             'recentAduans',
             'recentAspirasis',
-            'aduanStatusDistribution',
-            'agendaCategoryDistribution',
-            'activeEvents',
+            'recentActivity',
             'canViewAduan'
         ));
     }

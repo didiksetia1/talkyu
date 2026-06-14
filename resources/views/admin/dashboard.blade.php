@@ -213,53 +213,64 @@
     .badge-pending  { background: #fef3c7; color: #92400e; }
 
 
-    /* ---- Bar Chart Distribution ---- */
+    /* ---- Activity Feed ---- */
 
-    .chart-container {
-        padding: 20px 18px;
+    .activity-feed {
+        padding: 8px 0;
     }
 
-    .chart-bars {
+    .activity-item {
         display: flex;
-        align-items: flex-end;
-        justify-content: space-around;
+        align-items: flex-start;
         gap: 12px;
-        height: 120px;
-        margin-bottom: 16px;
+        padding: 12px 18px;
+        border-bottom: 1px solid #f9fafb;
     }
 
-    .chart-bar-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-dot {
+        flex-shrink: 0;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-top: 5px;
+    }
+
+    .activity-dot.dot-agenda   { background: #991b1b; }
+    .activity-dot.dot-aduan    { background: #dc2626; }
+    .activity-dot.dot-aspirasi { background: #f59e0b; }
+
+    .activity-content {
         flex: 1;
-        gap: 8px;
+        min-width: 0;
     }
 
-    .chart-bar {
-        width: 100%;
-        background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
-        border-radius: 6px 6px 0 0;
-        min-height: 8px;
-        transition: opacity 0.2s;
-    }
-
-    .chart-bar:hover {
-        opacity: 0.8;
-    }
-
-    .chart-label {
-        font-size: 11px;
-        font-weight: 500;
-        color: #374151;
-        text-align: center;
-        width: 100%;
-    }
-
-    .chart-value {
-        font-size: 12px;
-        font-weight: 700;
+    .activity-title {
+        font-size: 13px;
+        font-weight: 600;
         color: #1f2937;
+        margin: 0 0 3px 0;
+        line-height: 1.4;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .activity-meta {
+        font-size: 11px;
+        color: #9ca3af;
+        margin: 0;
+    }
+
+    .activity-time {
+        flex-shrink: 0;
+        font-size: 11px;
+        color: #9ca3af;
+        white-space: nowrap;
+        padding-top: 2px;
     }
 
 
@@ -488,43 +499,31 @@
     {{-- ---- Bottom Grid ---- --}}
     <div class="bottom-grid">
 
-        {{-- Distribusi Status Aduan --}}
+        {{-- Log Aktivitas Terbaru --}}
         <div class="card">
             <div class="card-header">
                 <h2>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 3v18h18"/>
-                        <rect x="5" y="11" width="2" height="8"/>
-                        <rect x="10" y="8" width="2" height="11"/>
-                        <rect x="15" y="5" width="2" height="14"/>
+                        <path d="M7 14l4-4 4 4 5-5"/>
                     </svg>
-                    Distribusi Status Aduan
+                    Log Aktivitas Terbaru
                 </h2>
             </div>
-            <div class="chart-container">
-                @if ($aduanStatusDistribution && count($aduanStatusDistribution) > 0)
-                    <div class="chart-bars">
-                        @php
-                            $maxCount = max(array_values($aduanStatusDistribution));
-                            $colors = ['#dc2626', '#f59e0b', '#10b981', '#3b82f6'];
-                            $colorIndex = 0;
-                        @endphp
-                        @forelse ($aduanStatusDistribution as $status => $count)
-                            @php
-                                $percentage = $maxCount > 0 ? ($count / $maxCount) * 100 : 0;
-                                $color = $colors[$colorIndex % count($colors)];
-                                $colorIndex++;
-                            @endphp
-                            <div class="chart-bar-wrapper">
-                                <div class="chart-value">{{ $count }}</div>
-                                <div class="chart-bar" style="height: {{ max($percentage, 15) }}%; background: linear-gradient(180deg, {{ $color }} 0%, rgba(153, 27, 27, 0.6) 100%);"></div>
-                                <div class="chart-label">{{ $status }}</div>
+            <div class="activity-feed">
+                @if ($recentActivity->count() > 0)
+                    @foreach ($recentActivity as $item)
+                        <div class="activity-item">
+                            <div class="activity-dot dot-{{ $item['type'] }}"></div>
+                            <div class="activity-content">
+                                <p class="activity-title">{{ $item['title'] }}</p>
+                                <p class="activity-meta">{{ $item['meta'] }}</p>
                             </div>
-                        @empty
-                        @endforelse
-                    </div>
+                            <span class="activity-time">{{ \Carbon\Carbon::parse($item['date'])->diffForHumans() }}</span>
+                        </div>
+                    @endforeach
                 @else
-                    <div class="empty-state">Belum ada data</div>
+                    <div class="empty-state">Belum ada aktivitas</div>
                 @endif
             </div>
         </div>
