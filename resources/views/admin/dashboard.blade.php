@@ -509,6 +509,7 @@
                     </svg>
                     Log Aktivitas Terbaru
                 </h2>
+                <a href="{{ route('admin.log') }}">Lihat Semua →</a>
             </div>
             <div class="activity-feed">
                 @if ($recentActivity->count() > 0)

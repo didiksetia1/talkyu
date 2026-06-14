@@ -77,8 +77,8 @@ class AdminDashboardController extends Controller
             ]);
         }
 
-        // Sort by date descending, take 15
-        $recentActivity = $recentActivity->sortByDesc('date')->take(15)->values();
+        // Sort by date descending, take 5 for dashboard
+        $recentActivity = $recentActivity->sortByDesc('date')->take(5)->values();
 
         return view('admin.dashboard', compact(
             'totalAgenda',
@@ -91,5 +91,67 @@ class AdminDashboardController extends Controller
             'recentActivity',
             'canViewAduan'
         ));
+    }
+
+    public function log(): View
+    {
+        $canViewAduan = Auth::user()?->role === 'admin';
+
+        $allActivity = collect();
+
+        // All agendas
+        $agendas = Agenda::latest()->get();
+        foreach ($agendas as $agenda) {
+            $allActivity->push([
+                'type' => 'agenda',
+                'title' => $agenda->title,
+                'meta' => $agenda->category,
+                'date' => $agenda->created_at,
+            ]);
+        }
+
+        // All aduans
+        if ($canViewAduan) {
+            $aduans = Aduan::latest()->get();
+            foreach ($aduans as $aduan) {
+                $allActivity->push([
+                    'type' => 'aduan',
+                    'title' => $aduan->judul,
+                    'meta' => $aduan->status ?? 'pending',
+                    'date' => $aduan->created_at,
+                ]);
+            }
+        }
+
+        // All aspirasis
+        $aspirasis = Aspirasi::with('user')->latest()->get();
+        foreach ($aspirasis as $aspirasi) {
+            $allActivity->push([
+                'type' => 'aspirasi',
+                'title' => $aspirasi->judul ?? 'Aspirasi',
+                'meta' => $aspirasi->user?->name ?? 'Anonymous',
+                'date' => $aspirasi->created_at,
+            ]);
+        }
+
+        // Sort desc and paginate manually
+        $allActivity = $allActivity->sortByDesc('date')->values();
+        $perPage = 20;
+        $page = request()->get('page', 1);
+        $total = $allActivity->count();
+        $items = $allActivity->slice(($page - 1) * $perPage, $perPage)->values();
+
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+            $items,
+            $total,
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        return view('admin.log', [
+            'activities' => $paginator,
+            'canViewAduan' => $canViewAduan,
+        ]);
     }
 }

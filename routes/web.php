@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             // Dashboard
             Route::get('/', [App\Http\Controllers\AdminDashboardController::class, 'index'])->name('dashboard');
+            Route::get('/log', [App\Http\Controllers\AdminDashboardController::class, 'log'])->name('log');
 
             // Agenda Routes
             Route::get('/agenda', [App\Http\Controllers\AdminAgendaController::class, 'index'])->name('agenda.index');
