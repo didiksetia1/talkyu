@@ -307,6 +307,17 @@
                 </div>
             @endif
 
+
+
+
+
+
+            @if(session('error'))
+                <div style="background: rgba(220, 38, 38, 0.12); border: 1px solid rgba(220, 38, 38, 0.35); color: #dc2626; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    ⚠️ {{ session('error') }}
+                </div>
+            @endif
+
             <form action="{{ route('agenda.comment', $agenda->id) }}" method="POST" class="comment-form">
                 @csrf
                 <textarea name="content" class="comment-input" placeholder="Tulis komentar Anda di sini..." required></textarea>
