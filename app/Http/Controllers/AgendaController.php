@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use App\Models\Agenda;
 use App\Models\AgendaComment;
 use App\Models\AgendaLike;
+use App\Traits\SpamFilterTrait;
 
 class AgendaController extends Controller
 {
+    use SpamFilterTrait;
+
     public function index()
     {
         $agendas = Agenda::withCount(['comments', 'likes'])->latest()->get();
@@ -31,6 +34,11 @@ class AgendaController extends Controller
         $request->validate([
             'content' => 'required|string|max:1000'
         ]);
+
+        // AI Spam Filtering untuk komentar agenda
+        if ($this->isSpamWithAI($request->content)) {
+            return back()->with('error', 'Sistem AI mendeteksi komentar Anda terindikasi spam atau mengandung kata-kata yang tidak pantas.');
+        }
 
         AgendaComment::create([
             'agenda_id' => $agenda->id,
