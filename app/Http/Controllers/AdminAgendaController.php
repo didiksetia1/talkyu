@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agenda;
+use App\Models\AgendaComment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -107,5 +108,25 @@ class AdminAgendaController extends Controller
 
         return redirect()->route('admin.agenda.index')
             ->with('success', 'Postingan agenda berhasil dihapus.');
+    }
+
+    // === Comment Management ===
+
+    public function comments($id): View
+    {
+        $agenda = Agenda::withCount('comments')->findOrFail($id);
+        $comments = $agenda->comments()->with('user')->latest()->paginate(20);
+
+        return view('admin.agenda.comments', compact('agenda', 'comments'));
+    }
+
+    public function destroyComment($id, $commentId): RedirectResponse
+    {
+        $agenda = Agenda::findOrFail($id);
+        $comment = AgendaComment::where('agenda_id', $agenda->id)->findOrFail($commentId);
+        $comment->delete();
+
+        return redirect()->route('admin.agenda.comments', $id)
+            ->with('success', 'Komentar berhasil dihapus.');
     }
 }

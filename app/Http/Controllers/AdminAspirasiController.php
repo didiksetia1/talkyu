@@ -17,8 +17,8 @@ class AdminAspirasiController extends Controller
         if ($request->filled('q')) {
             $keyword = $request->q;
             $query->where(function ($q) use ($keyword) {
-                $q->where('nama', 'like', '%' . $keyword . '%')
-                    ->orWhere('saran', 'like', '%' . $keyword . '%');
+                $q->where('judul', 'like', '%' . $keyword . '%')
+                    ->orWhere('deskripsi', 'like', '%' . $keyword . '%');
             });
         }
 
@@ -73,5 +73,38 @@ class AdminAspirasiController extends Controller
             ),
             $filename
         );
+    }
+
+    // === Comment Management ===
+
+    public function comments($id)
+    {
+        $aspirasi = Aspirasi::withCount('comments')->findOrFail($id);
+        $comments = DB::table('aspirasi_comments')
+            ->leftJoin('users', 'aspirasi_comments.user_id', '=', 'users.id')
+            ->select('aspirasi_comments.*', 'users.name as user_name')
+            ->where('aspirasi_comments.aspirasi_id', $id)
+            ->latest('aspirasi_comments.created_at')
+            ->paginate(20);
+
+        return view('admin.aspirasi.comments', compact('aspirasi', 'comments'));
+    }
+
+    public function destroyComment($id, $commentId)
+    {
+        $aspirasi = Aspirasi::findOrFail($id);
+
+        $comment = DB::table('aspirasi_comments')
+            ->where('aspirasi_id', $aspirasi->id)
+            ->where('id', $commentId)
+            ->first();
+
+        if ($comment) {
+            DB::table('aspirasi_comments')->where('id', $commentId)->delete();
+            $aspirasi->decrement('comments_count');
+        }
+
+        return redirect()->route('admin.aspirasi.comments', $id)
+            ->with('success', 'Komentar berhasil dihapus.');
     }
 }

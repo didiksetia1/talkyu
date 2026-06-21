@@ -217,6 +217,15 @@
         background: #059669;
     }
 
+    .btn-comments {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .btn-comments:hover {
+        background: #bfdbfe;
+    }
+
     .form-modal {
         background: white;
         border: 1px solid #e5e7eb;
@@ -403,6 +412,9 @@
                 <button class="btn-action btn-secondary" onclick="updateStatus({{ $aspirasi->id }})">
                     Update Status
                 </button>
+                <a href="{{ route('admin.aspirasi.comments', $aspirasi->id) }}" class="btn-action btn-comments" style="text-decoration: none;">
+                    Komentar ({{ $aspirasi->comments_count }})
+                </a>
             </div>
 
             <!-- Response Form (Hidden by default) -->

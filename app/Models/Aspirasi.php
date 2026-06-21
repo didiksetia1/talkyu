@@ -35,4 +35,9 @@ class Aspirasi extends Model
     {
         return $this->belongsTo(User::class, 'responded_by');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(\App\Models\AspirasiComment::class, 'aspirasi_id');
+    }
 }

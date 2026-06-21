@@ -76,11 +76,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/agenda/{id}/edit', [App\Http\Controllers\AdminAgendaController::class, 'edit'])->name('agenda.edit');
             Route::put('/agenda/{id}', [App\Http\Controllers\AdminAgendaController::class, 'update'])->name('agenda.update');
             Route::delete('/agenda/{id}', [App\Http\Controllers\AdminAgendaController::class, 'destroy'])->name('agenda.destroy');
+            Route::get('/agenda/{id}/comments', [App\Http\Controllers\AdminAgendaController::class, 'comments'])->name('agenda.comments');
+            Route::delete('/agenda/{id}/comments/{commentId}', [App\Http\Controllers\AdminAgendaController::class, 'destroyComment'])->name('agenda.comments.destroy');
 
             // Aspirasi Routes
             Route::get('/aspirasi', [App\Http\Controllers\AdminAspirasiController::class, 'index'])->name('aspirasi.index');
             Route::get('/aspirasi/export', [App\Http\Controllers\AdminAspirasiController::class, 'exportExcel'])->name('aspirasi.export');
             Route::post('/aspirasi/{id}/respond', [App\Http\Controllers\AdminAspirasiController::class, 'respond'])->name('aspirasi.respond');
+            Route::get('/aspirasi/{id}/comments', [App\Http\Controllers\AdminAspirasiController::class, 'comments'])->name('aspirasi.comments');
+            Route::delete('/aspirasi/{id}/comments/{commentId}', [App\Http\Controllers\AdminAspirasiController::class, 'destroyComment'])->name('aspirasi.comments.destroy');
 
             Route::middleware([IsAdmin::class])->group(function () {
                 // Aduan Routes

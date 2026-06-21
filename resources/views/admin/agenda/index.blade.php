@@ -154,6 +154,11 @@
         color: #334155;
     }
 
+    .btn-comments {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
     .btn-edit {
         background: #fde68a;
         color: #92400e;
@@ -317,6 +322,7 @@
                     <td>
                         <div class="action-group">
                             <a href="{{ route('agenda.show', $agenda->id) }}" class="btn-action btn-preview">Preview</a>
+                            <a href="{{ route('admin.agenda.comments', $agenda->id) }}" class="btn-action btn-comments">Komentar ({{ $agenda->comments_count }})</a>
                             <a href="{{ route('admin.agenda.edit', $agenda->id) }}" class="btn-action btn-edit">Edit</a>
                             <form action="{{ route('admin.agenda.destroy', $agenda->id) }}" method="POST" onsubmit="return confirm('Hapus postingan ini? Komentar dan like akan ikut terhapus.');">
                                 @csrf
