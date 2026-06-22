@@ -16,13 +16,14 @@ trait SpamFilterTrait
      */
     protected function isSpamWithAI(string $text): bool
     {
-        // ========== LAPISAN 1: Manual Bad Words ==========
-        $manualCheck = function ($t) {
-            $badWords = [
-                'gratis', 'spam', 'judi', 'judol', 'pinjol',
-                'slot', 'promo', 'jembut', 'kasar', 'porno',
-                'kontol', 'memek', 'bangsat', 'anjing', 'babi'
-            ];
+        // ========== Manual Bad Words List ==========
+        $badWords = [
+            'gratis', 'spam', 'judi', 'judol', 'pinjol',
+            'slot', 'promo', 'jembut', 'kasar', 'porno',
+            'kontol', 'memek', 'bangsat', 'anjing', 'babi'
+        ];
+
+        $manualCheck = function ($t) use ($badWords) {
             $textLower = strtolower($t);
             foreach ($badWords as $word) {
                 if (strpos($textLower, $word) !== false) {
@@ -38,7 +39,7 @@ trait SpamFilterTrait
             return $manualCheck($text);
         }
 
-        // ========== LAPISAN 2: Gemini AI ==========
+        // ========== LAPISAN 1: Gemini AI ==========
         try {
             $prompt = "Tugas Anda adalah mendeteksi apakah teks berikut adalah spam, promosi, atau mengandung kata-kata tidak pantas/kasar (seperti judi online, pinjol) dalam konteks aplikasi pengaduan kampus. Jawab HANYA dengan 'YA' jika teks tersebut adalah spam/tidak pantas, dan 'TIDAK' jika teks tersebut wajar atau bersih. Teks: " . $text;
 
@@ -69,8 +70,7 @@ trait SpamFilterTrait
                     return true; // AI bilang spam
                 }
 
-                // Lapis terakhir: cek ulang manual
-                return $manualCheck($text);
+                // Gemini bilang TIDAK spam, lanjut cek manual
             } else {
                 Log::error('Gemini API Error Response: ' . $response->body());
             }
@@ -78,7 +78,7 @@ trait SpamFilterTrait
             Log::error('Gemini API Exception: ' . $e->getMessage());
         }
 
-        // ========== FALLBACK: Manual ==========
+        // ========== LAPISAN 2: Manual Bad Words ==========
         return $manualCheck($text);
     }
 }
