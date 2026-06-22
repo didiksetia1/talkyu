@@ -84,6 +84,59 @@
         font-weight: 600;
         text-transform: capitalize;
     }
+
+    /* Pagination */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .pagination-wrapper a,
+    .pagination-wrapper span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #374151;
+        text-decoration: none;
+        background: white;
+        transition: all 0.15s ease;
+        min-width: 40px;
+        height: 38px;
+    }
+
+    .pagination-wrapper a:hover {
+        background: #fef2f2;
+        border-color: #dc2626;
+        color: #dc2626;
+    }
+
+    .pagination-wrapper span[aria-current="page"],
+    .pagination-wrapper .active span {
+        background: #dc2626;
+        color: white;
+        border-color: #dc2626;
+        font-weight: 600;
+    }
+
+    .pagination-wrapper .disabled span {
+        color: #d1d5db;
+        cursor: not-allowed;
+    }
+
+    .pagination-info {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 13px;
+        color: #6b7280;
+    }
 </style>
 @endsection
 
@@ -151,9 +204,33 @@
             </div>
         @endforelse
 
-        <div style="margin-top: 30px;">
-            {{ $aspirasis->links() }}
+        <!-- Pagination -->
+        @if($aspirasis->hasPages())
+        <div class="pagination-wrapper">
+            @if($aspirasis->onFirstPage())
+                <span class="disabled" aria-disabled="true">&laquo;</span>
+            @else
+                <a href="{{ $aspirasis->previousPageUrl() }}" rel="prev">&laquo;</a>
+            @endif
+
+            @foreach($aspirasis->getUrlRange(1, $aspirasis->lastPage()) as $page => $url)
+                @if($page == $aspirasis->currentPage())
+                    <span aria-current="page">{{ $page }}</span>
+                @else
+                    <a href="{{ $url }}">{{ $page }}</a>
+                @endif
+            @endforeach
+
+            @if($aspirasis->hasMorePages())
+                <a href="{{ $aspirasis->nextPageUrl() }}" rel="next">&raquo;</a>
+            @else
+                <span class="disabled" aria-disabled="true">&raquo;</span>
+            @endif
         </div>
+        <div class="pagination-info">
+            Menampilkan {{ $aspirasis->firstItem() }} - {{ $aspirasis->lastItem() }} dari {{ $aspirasis->total() }} aspirasi
+        </div>
+        @endif
     </div>
 </div>
 @endsection

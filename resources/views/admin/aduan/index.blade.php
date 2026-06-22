@@ -297,6 +297,59 @@
         color: #6b7280;
         font-size: 14px;
     }
+
+    /* Pagination */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .pagination-wrapper a,
+    .pagination-wrapper span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #374151;
+        text-decoration: none;
+        background: white;
+        transition: all 0.15s ease;
+        min-width: 40px;
+        height: 38px;
+    }
+
+    .pagination-wrapper a:hover {
+        background: #fef2f2;
+        border-color: #dc2626;
+        color: #dc2626;
+    }
+
+    .pagination-wrapper span[aria-current="page"],
+    .pagination-wrapper .active span {
+        background: #dc2626;
+        color: white;
+        border-color: #dc2626;
+        font-weight: 600;
+    }
+
+    .pagination-wrapper .disabled span {
+        color: #d1d5db;
+        cursor: not-allowed;
+    }
+
+    .pagination-info {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 13px;
+        color: #6b7280;
+    }
 </style>
 @endsection
 
@@ -417,9 +470,32 @@
         @endforeach
 
         <!-- Pagination -->
-        <div style="margin-top: 30px;">
-            {{ $aduans->links() }}
+        @if($aduans->hasPages())
+        <div class="pagination-wrapper">
+            @if($aduans->onFirstPage())
+                <span class="disabled" aria-disabled="true">&laquo;</span>
+            @else
+                <a href="{{ $aduans->previousPageUrl() }}" rel="prev">&laquo;</a>
+            @endif
+
+            @foreach($aduans->getUrlRange(1, $aduans->lastPage()) as $page => $url)
+                @if($page == $aduans->currentPage())
+                    <span aria-current="page">{{ $page }}</span>
+                @else
+                    <a href="{{ $url }}">{{ $page }}</a>
+                @endif
+            @endforeach
+
+            @if($aduans->hasMorePages())
+                <a href="{{ $aduans->nextPageUrl() }}" rel="next">&raquo;</a>
+            @else
+                <span class="disabled" aria-disabled="true">&raquo;</span>
+            @endif
         </div>
+        <div class="pagination-info">
+            Menampilkan {{ $aduans->firstItem() }} - {{ $aduans->lastItem() }} dari {{ $aduans->total() }} aduan
+        </div>
+        @endif
     @else
         <div class="empty-state">
             <p>Belum ada aduan masuk.</p>
