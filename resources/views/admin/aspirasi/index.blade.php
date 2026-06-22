@@ -248,6 +248,14 @@
         background: #059669;
     }
 
+    .btn-danger {
+        background: #dc2626;
+    }
+
+    .btn-danger:hover {
+        background: #b91c1c;
+    }
+
     .btn-comments {
         background: #dbeafe;
         color: #1e40af;
@@ -367,6 +375,51 @@
         z-index: 10000;
     }
 
+    /* Delete Confirm Modal */
+    .delete-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .delete-modal.active {
+        display: flex;
+    }
+
+    .delete-modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 420px;
+        width: 90%;
+        text-align: center;
+    }
+
+    .delete-modal-content h3 {
+        margin: 0 0 10px;
+        color: #1f2937;
+        font-size: 18px;
+    }
+
+    .delete-modal-content p {
+        color: #6b7280;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .delete-modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
     /* Pagination */
     .pagination-wrapper {
         display: flex;
@@ -427,6 +480,18 @@
 <div id="imgModal" class="img-modal" onclick="closeImgModal()">
     <span class="img-modal-close">&times;</span>
     <img id="imgModalSrc" src="" alt="Preview">
+</div>
+
+<!-- Delete Confirm Modal -->
+<div id="deleteModal" class="delete-modal">
+    <div class="delete-modal-content">
+        <h3>Hapus Aspirasi?</h3>
+        <p id="deleteModalText">Aspirasi yang dihapus tidak dapat dikembalikan. Lanjutkan?</p>
+        <div class="delete-modal-buttons">
+            <button class="btn-action btn-danger" id="deleteConfirmBtn">Ya, Hapus</button>
+            <button class="btn-action btn-secondary" onclick="closeDeleteModal()">Batal</button>
+        </div>
+    </div>
 </div>
 
 <div class="admin-container" style="margin-top: 30px !important;">
@@ -559,6 +624,9 @@
                 <a href="{{ route('admin.aspirasi.comments', $aspirasi->id) }}" class="btn-action btn-comments" style="text-decoration: none;">
                     Komentar ({{ $aspirasi->comments_count }})
                 </a>
+                <button class="btn-action btn-danger" onclick="confirmDelete({{ $aspirasi->id }}, '{{ addslashes($aspirasi->judul ?? 'Tanpa Judul') }}')">
+                    Hapus
+                </button>
             </div>
 
             <!-- Response Form (Hidden by default) -->
@@ -667,9 +735,48 @@ function closeImgModal() {
     document.getElementById('imgModal').classList.remove('active');
 }
 
+// Delete modal
+let deleteTargetId = null;
+
+function confirmDelete(id, judul) {
+    deleteTargetId = id;
+    document.getElementById('deleteModalText').textContent =
+        `Aspirasi "${judul}" akan dihapus permanen. Lanjutkan?`;
+    document.getElementById('deleteModal').classList.add('active');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.remove('active');
+    deleteTargetId = null;
+}
+
+document.getElementById('deleteConfirmBtn').addEventListener('click', function() {
+    if (!deleteTargetId) return;
+
+    fetch(`/admin/aspirasi/${deleteTargetId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+            'Accept': 'application/json'
+        }
+    })
+    .then(res => {
+        if (res.ok || res.redirected) {
+            window.location.href = '{{ route("admin.aspirasi.index") }}';
+        } else {
+            alert('Gagal menghapus aspirasi.');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Terjadi kesalahan.');
+    });
+});
+
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeImgModal();
+        closeDeleteModal();
     }
 });
 </script>

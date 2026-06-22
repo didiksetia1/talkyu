@@ -85,6 +85,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/aspirasi/{id}/respond', [App\Http\Controllers\AdminAspirasiController::class, 'respond'])->name('aspirasi.respond');
             Route::get('/aspirasi/{id}/comments', [App\Http\Controllers\AdminAspirasiController::class, 'comments'])->name('aspirasi.comments');
             Route::delete('/aspirasi/{id}/comments/{commentId}', [App\Http\Controllers\AdminAspirasiController::class, 'destroyComment'])->name('aspirasi.comments.destroy');
+            Route::delete("/aspirasi/{id}", [App\Http\Controllers\AdminAspirasiController::class, "destroy"])->name("aspirasi.destroy");
 
             Route::middleware([IsAdmin::class])->group(function () {
                 // Aduan Routes
