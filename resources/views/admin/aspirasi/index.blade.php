@@ -138,6 +138,37 @@
         color: #374151;
     }
 
+    .aspirasi-lampiran {
+        margin-bottom: 12px;
+    }
+
+    .aspirasi-lampiran img {
+        max-width: 300px;
+        max-height: 200px;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        object-fit: cover;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+    }
+
+    .aspirasi-lampiran img:hover {
+        transform: scale(1.02);
+    }
+
+    .lampiran-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        background: #eff6ff;
+        color: #1e40af;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 12px;
+    }
+
     .status-badge {
         display: inline-block;
         padding: 4px 8px;
@@ -298,10 +329,106 @@
         color: #6b7280;
         font-size: 14px;
     }
+
+    /* Image Modal */
+    .img-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .img-modal.active {
+        display: flex;
+    }
+
+    .img-modal img {
+        max-width: 90vw;
+        max-height: 90vh;
+        border-radius: 8px;
+        object-fit: contain;
+    }
+
+    .img-modal-close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 10000;
+    }
+
+    /* Pagination */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .pagination-wrapper a,
+    .pagination-wrapper span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #374151;
+        text-decoration: none;
+        background: white;
+        transition: all 0.15s ease;
+        min-width: 40px;
+        height: 38px;
+    }
+
+    .pagination-wrapper a:hover {
+        background: #fef2f2;
+        border-color: #dc2626;
+        color: #dc2626;
+    }
+
+    .pagination-wrapper span[aria-current="page"],
+    .pagination-wrapper .active span {
+        background: #dc2626;
+        color: white;
+        border-color: #dc2626;
+        font-weight: 600;
+    }
+
+    .pagination-wrapper .disabled span {
+        color: #d1d5db;
+        cursor: not-allowed;
+    }
+
+    .pagination-info {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 13px;
+        color: #6b7280;
+    }
 </style>
 @endsection
 
 @section('content')
+<!-- Image Preview Modal -->
+<div id="imgModal" class="img-modal" onclick="closeImgModal()">
+    <span class="img-modal-close">&times;</span>
+    <img id="imgModalSrc" src="" alt="Preview">
+</div>
+
 <div class="admin-container" style="margin-top: 30px !important;">
 
     <!-- Stats -->
@@ -392,6 +519,23 @@
                 </span>
             </div>
 
+            <!-- Lampiran / Gambar -->
+            @if($aspirasi->lampiran)
+            <div class="aspirasi-lampiran">
+                @php
+                    $ext = pathinfo($aspirasi->lampiran, PATHINFO_EXTENSION);
+                    $isImage = in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                @endphp
+                @if($isImage)
+                    <img src="{{ asset('storage/' . $aspirasi->lampiran) }}" alt="Lampiran aspirasi" onclick="openImgModal('{{ asset('storage/' . $aspirasi->lampiran) }}')" title="Klik untuk memperbesar">
+                @else
+                    <a href="{{ asset('storage/' . $aspirasi->lampiran) }}" target="_blank" class="lampiran-badge">
+                        📎 Lampiran ({{ strtoupper($ext) }})
+                    </a>
+                @endif
+            </div>
+            @endif
+
             <div class="aspirasi-content">
                 <strong>Deskripsi:</strong> {{ Str::limit($aspirasi->deskripsi, 150) }}
                 @if(strlen($aspirasi->deskripsi) > 150) ... @endif
@@ -443,9 +587,32 @@
         @endforeach
 
         <!-- Pagination -->
-        <div style="margin-top: 30px;">
-            {{ $aspirasis->links() }}
+        @if($aspirasis->hasPages())
+        <div class="pagination-wrapper">
+            @if($aspirasis->onFirstPage())
+                <span class="disabled" aria-disabled="true">&laquo;</span>
+            @else
+                <a href="{{ $aspirasis->previousPageUrl() }}" rel="prev">&laquo;</a>
+            @endif
+
+            @foreach($aspirasis->getUrlRange(1, $aspirasis->lastPage()) as $page => $url)
+                @if($page == $aspirasis->currentPage())
+                    <span aria-current="page">{{ $page }}</span>
+                @else
+                    <a href="{{ $url }}">{{ $page }}</a>
+                @endif
+            @endforeach
+
+            @if($aspirasis->hasMorePages())
+                <a href="{{ $aspirasis->nextPageUrl() }}" rel="next">&raquo;</a>
+            @else
+                <span class="disabled" aria-disabled="true">&raquo;</span>
+            @endif
         </div>
+        <div class="pagination-info">
+            Menampilkan {{ $aspirasis->firstItem() }} - {{ $aspirasis->lastItem() }} dari {{ $aspirasis->total() }} aspirasi
+        </div>
+        @endif
     @else
         <div class="empty-state">
             <p>Belum ada aspirasi masuk.</p>
@@ -490,5 +657,20 @@ function submitResponse(event, aspirasi_id) {
 function updateStatus(aspirasi_id) {
     openResponseForm(aspirasi_id);
 }
+
+function openImgModal(src) {
+    document.getElementById('imgModalSrc').src = src;
+    document.getElementById('imgModal').classList.add('active');
+}
+
+function closeImgModal() {
+    document.getElementById('imgModal').classList.remove('active');
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeImgModal();
+    }
+});
 </script>
 @endsection
